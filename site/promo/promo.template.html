@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="uk"><head><meta charset="utf-8"><title>Kmit: промо 60 с</title>
+<style>
+@font-face { font-family: Manrope; font-weight: 800; src: url(../../app/ui/fonts/Manrope-800.ttf) format('truetype'); }
+@font-face { font-family: Manrope; font-weight: 600; src: url(../../app/ui/fonts/Manrope-600.ttf) format('truetype'); }
+@font-face { font-family: Caveat; font-weight: 700; src: url(../../app/ui/fonts/Caveat-700.ttf) format('truetype'); }
+html, body { margin: 0; background: #05070f; }
+#stage { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: #05070f; font-family: Manrope, sans-serif; color: #fff; perspective: 2600px; }
+.abs { position: absolute; left: 0; top: 0; will-change: transform, opacity, filter; }
+#glow { width: 1920px; height: 1080px; background: radial-gradient(1000px 760px at 50% 55%, rgba(60,90,255,.30), rgba(5,7,15,0) 70%); opacity: 0; }
+#grid { left: -60px; top: -60px; width: 2040px; height: 1200px; opacity: 0; background-image: linear-gradient(rgba(150,170,255,.09) 1px, transparent 1px), linear-gradient(90deg, rgba(150,170,255,.09) 1px, transparent 1px); background-size: 56px 56px; }
+.phone { width: 460px; height: 996px; border-radius: 76px; background: #0b0f20; border: 10px solid #1b2347; box-shadow: 0 0 0 2px #3b4a8f, 0 60px 160px rgba(30,60,255,.42); overflow: hidden; transform-style: preserve-3d; opacity: 0; }
+.phone .screen { position: absolute; inset: 0; border-radius: 66px; overflow: hidden; background: #f3f7fb; }
+.phone img { position: absolute; left: 0; top: 40px; width: 100%; height: calc(100% - 40px); object-fit: cover; object-position: top; opacity: 0; }
+.phone .notch { position: absolute; top: 18px; left: 50%; width: 130px; height: 34px; margin-left: -65px; border-radius: 20px; background: #05070f; z-index: 5; }
+.tx { width: 820px; opacity: 1; }
+.tx .k { font-weight: 800; letter-spacing: .16em; text-transform: uppercase; font-size: 28px; color: #ffd23f; margin-bottom: 26px; display: flex; align-items: center; gap: 18px; }
+.tx .k b { display: inline-grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: #ffd23f; color: #0b0f20; font-size: 26px; letter-spacing: 0; }
+.tx h2 { margin: 0; font-weight: 800; font-size: 104px; letter-spacing: -0.03em; line-height: 1.02; }
+.tx p { margin: 34px 0 0; font-weight: 600; font-size: 42px; line-height: 1.34; color: #c3ccf2; }
+.tx.center { width: 1920px; text-align: center; left: 0; }
+.tx.center p { max-width: 1280px; margin-left: auto; margin-right: auto; }
+.big { font-weight: 800; font-size: 170px; letter-spacing: -0.035em; line-height: 1.02; text-align: center; width: 1920px; opacity: 0; }
+.hsub { font-weight: 600; font-size: 48px; color: #c3ccf2; text-align: center; width: 1920px; opacity: 0; }
+.chip { display: inline-block; font-weight: 800; font-size: 27px; padding: 8px 20px; border-radius: 999px; border: 2px solid rgba(160,180,255,.4); color: #e6ebff; background: rgba(255,255,255,.05); margin: 0 10px 12px 0; opacity: 0; }
+.tile { width: 300px; height: 300px; border-radius: 40px; background: rgba(255,255,255,.06); border: 2px solid rgba(160,180,255,.28); display: grid; place-items: center; opacity: 0; }
+.tile svg { width: 168px; height: 168px; filter: drop-shadow(0 10px 0 rgba(0,0,0,.35)); }
+.tile b { position: absolute; bottom: 20px; left: 0; right: 0; text-align: center; font-weight: 800; font-size: 28px; color: #dfe6ff; }
+.tile em { position: absolute; top: 16px; left: 0; right: 0; text-align: center; font-style: normal; font-weight: 800; font-size: 22px; letter-spacing: .1em; color: #8fa0e8; text-transform: uppercase; }
+.step { display: flex; align-items: center; gap: 22px; font-weight: 800; font-size: 40px; margin: 0 0 20px; opacity: 0; }
+.step i { font-style: normal; display: inline-grid; place-items: center; width: 58px; height: 58px; border-radius: 50%; background: #1fb07a; color: #fff; font-size: 34px; }
+.conf { width: 22px; height: 22px; opacity: 0; }
+.paper { width: 1920px; height: 1080px; background-color: #f3f7fb; background-image: linear-gradient(#d3e0ee 1px, transparent 1px), linear-gradient(90deg, #d3e0ee 1px, transparent 1px); background-size: 56px 56px; clip-path: circle(0px at 50% 52%); }
+.logo { font-family: Caveat, cursive; font-weight: 700; font-size: 400px; color: #1b2a6b; text-align: center; width: 1920px; line-height: 1; opacity: 0; }
+.tag { font-weight: 800; font-size: 52px; color: #1b2a6b; text-align: center; width: 1920px; opacity: 0; }
+.tag.s { font-size: 38px; color: #4a5a96; font-weight: 600; }
+svg.off { width: 360px; height: 360px; }
+</style></head>
+<body>
+<div id="stage">
+  <div class="abs" id="grid"></div>
+  <div class="abs" id="glow"></div>
+  <div id="layers"></div>
+  <div class="abs phone" id="ph1"><div class="notch"></div><div class="screen" id="sc1"></div></div>
+  <div class="abs phone" id="ph2"><div class="notch"></div><div class="screen" id="sc2"></div></div>
+  <div id="confetti"></div>
+  <div class="abs paper" id="paper"></div>
+  <div class="abs logo" id="logo" style="top:250px">Kmit</div>
+  <div class="abs tag" id="tag1" style="top:660px">Вчитися можна без інтернету.</div>
+  <div class="abs tag s" id="tag2" style="top:742px">Пілот · 5–7 класи</div>
+</div>
+<script>
+const $ = (id) => document.getElementById(id);
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const prog = (t, a, b) => clamp((t - a) / (b - a));
+const eOut = (x) => 1 - Math.pow(1 - x, 3);
+const eOut5 = (x) => 1 - Math.pow(1 - x, 5);
+const eIO = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const eBack = (x) => { const c1 = 1.70158, c3 = c1 + 1; return 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const lerp = (a, b, x) => a + (b - a) * x;
+const put = (e, o, tx = 0, ty = 0, sc = 1, blur = 0, rot = '') => {
+  e.style.opacity = o;
+  e.style.transform = `translate(${tx}px, ${ty}px) scale(${sc}) ${rot}`;
+  e.style.filter = blur > 0.05 ? `blur(${blur}px)` : 'none';
+};
+const mk = (tag, cls, html, style) => { const e = document.createElement(tag); if (cls) e.className = cls; if (html != null) e.innerHTML = html; if (style) e.style.cssText = style; return e; };
+
+// Сценарій: 60 с без звуку; усі тексти несуть зміст самі. Знімки екранів справжні (site/assets/shots).
+// side: з якого боку телефон ('right' = телефон праворуч, текст ліворуч); 'two' = два телефони (кабінет вчителя).
+const SUBJECTS = ['Математика', 'Українська мова', 'Українська література', 'Англійська мова', 'Історія', 'Природознавство', 'Біологія', 'Географія', 'Фізика', 'Хімія', 'Інформатика'];
+const S = [
+  { id: 'hook', a: 0, b: 4.6 },
+  { id: 'meet', a: 4.6, b: 10.4, side: 'right', screens: [['home', 4.6]], k: 'Знайомтесь', head: 'Зошит, який вчить сам.', sub: 'Для 5–7 класів за програмою НУШ. Одинадцять предметів і жодного інтернету.', chips: true },
+  { id: 'explain', a: 10.4, b: 15.8, side: 'left', screens: [['lesson-hook', 10.4], ['lesson-example', 13.0]], n: 1, k: 'Пояснює', head: 'Спершу — зрозуміти.', sub: 'Короткий урок і розібраний приклад: що робимо на кожному кроці й чому.' },
+  { id: 'hint', a: 15.8, b: 21.8, side: 'right', screens: [['task', 15.8], ['hint', 17.8], ['feedback', 19.8]], n: 2, k: 'Підказує', head: 'Підказка, а не відповідь.', sub: 'Питання, правило, хід думки. До відповіді дитина доходить сама, а помилку їй пояснюють спокійно.' },
+  { id: 'remind', a: 21.8, b: 26.4, side: 'left', screens: [['review', 21.8], ['ruler', 24.0]], n: 3, k: 'Нагадує', head: 'Вчасно нагадає.', sub: 'Теми повертаються через інтервали, щоб знання лишалися. Нічого не «згорає».' },
+  { id: 'comfort', a: 26.4, b: 30.8, side: 'right', screens: [['settings', 26.4]], k: 'Для кожного', head: 'Зручно кожному.', sub: 'Великий шрифт, режим читання, менше руху й ліміти часу, які встановлює дорослий.' },
+  { id: 'worlds', a: 30.8, b: 36.2, tiles: true, k: 'Колекції', head: 'Кожен клас — свій світ.', sub: 'Істот «малює» опанована тема. Нагороди за розуміння й наполегливість, а не за час у застосунку.' },
+  { id: 'party', a: 36.2, b: 41.6, side: 'right', screens: [['ceremony-summary', 36.2], ['ceremony-world', 38.0], ['ceremony-done', 39.9]], confetti: 38.1, k: 'Перехід до наступного класу', head: 'Це свято, а не іспит.', sub: 'Парад істот, новий світ, свідоцтво на згадку. Без тиску й без оцінок.' },
+  { id: 'teach', a: 41.6, b: 46.8, side: 'two', screens: [['cabinet', 41.6]], screens2: [['work-ready', 41.6]], k: 'Вчителю', head: 'Час для уроку.', sub: 'Самостійна чи контрольна на кілька варіантів, із ключем і бланком, за хвилину. Жодних даних учнів.' },
+  { id: 'quality', a: 46.8, b: 51.8, side: 'left', screens: [['reviewer-home', 46.8], ['reviewer-summary', 49.0]], k: 'Якість', head: 'Помилка вчить неправильно.', sub: 'Тому ключі спершу перевіряє незалежний перевіряльник, а далі вичитує методист.', steps: ['Автор пише тему', 'Незалежна перевірка ключів', 'Вичитка методистом'] },
+  { id: 'privacy', a: 51.8, b: 56.6, off: true, k: 'Приватність', head: 'Усе лишається в телефоні.', sub: 'Без інтернету, реклами й облікових записів. Код відкритий, а для школи й родини Kmit безкоштовний.' },
+  { id: 'end', a: 56.6, b: 60 },
+];
+const layers = $('layers');
+S.forEach((s) => {
+  if (s.id === 'hook') {
+    s.e1 = layers.appendChild(mk('div', 'abs big', 'Коли дитина вчиться,', 'top:300px'));
+    s.e2 = layers.appendChild(mk('div', 'abs big', 'вона нам довіряє.', 'top:480px;color:#ffd23f'));
+    s.e3 = layers.appendChild(mk('div', 'abs hsub', 'Тому ми дбаємо про кожну тему, кожну підказку й кожен дотик.', 'top:730px'));
+    return;
+  }
+  if (s.id === 'end') return;
+  const x = s.side === 'right' ? 150 : s.side === 'left' ? 960 : s.side === 'two' ? 1250 : 0;
+  const w = s.side === 'two' ? 600 : 820;
+  const center = !s.side && !s.off;
+  const t = mk('div', `abs tx${center ? ' center' : ''}`, '', `left:${center ? 0 : x}px;top:${center ? 60 : s.side === 'two' ? 200 : 270}px;${center ? '' : `width:${w}px`}`);
+  const small = s.side === 'two' || s.id === 'meet' || (s.head.length > 24 && !center);
+  t.innerHTML = `<div class="k">${s.n ? `<b>${s.n}</b>` : ''}${s.k}</div><h2${small ? ' style="font-size:86px"' : ''}>${s.head}</h2><p>${s.sub}</p>`;
+  s.t = layers.appendChild(t);
+  if (s.chips) {
+    const box = mk('div', 'abs', '', `left:${x}px;top:735px;width:${w + 200}px`);
+    s.chipEls = SUBJECTS.map((n) => box.appendChild(mk('span', 'chip', n)));
+    layers.appendChild(box);
+  }
+  if (s.steps) {
+    const box = mk('div', 'abs', '', `left:${x}px;top:760px;width:${w}px`);
+    s.stepEls = s.steps.map((n) => box.appendChild(mk('div', 'step', `<i>✓</i>${n}`)));
+    layers.appendChild(box);
+  }
+  if (s.off) {
+    const svg = `<svg class="off" viewBox="0 0 24 24" fill="none" stroke="#ffd23f" stroke-width="1.4" stroke-linecap="round"><path d="M2 8.8a15 15 0 0 1 20 0M5.5 12.4a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.4" r=".6" fill="#ffd23f"/><path d="M3 3l18 18" stroke="#ff8a7a" stroke-width="1.8"/></svg>`;
+    s.icon = layers.appendChild(mk('div', 'abs', svg, 'left:300px;top:340px;opacity:0'));
+    t.style.left = '760px'; t.style.width = '1000px'; t.style.top = '300px';
+  }
+  if (s.tiles) {
+    s.tileEls = [];
+    {{tiles}}
+  }
+});
+const phones = [{ el: $('ph1'), sc: $('sc1'), imgs: [] }, { el: $('ph2'), sc: $('sc2'), imgs: [] }];
+S.forEach((s) => {
+  [[s.screens, 0], [s.screens2, 1]].forEach(([list, pi]) => (list || []).forEach(([src, at]) => {
+    const img = document.createElement('img'); img.src = `../assets/shots/${src}.png`; img.alt = ''; phones[pi].sc.append(img); phones[pi].imgs.push({ img, at, end: 1e9 });
+  }));
+});
+phones.forEach((p) => p.imgs.forEach((x, i) => { if (i + 1 < p.imgs.length) x.end = p.imgs[i + 1].at; }));
+
+// Конфеті
+const confEl = $('confetti');
+const colors = ['#ffd23f', '#d93a2f', '#2b4bd6', '#1fb07a', '#ff8fb3', '#8fe0ff'];
+let seed = 7; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+const conf = Array.from({ length: 80 }, (_, i) => { const e = mk('div', 'abs conf'); e.style.background = colors[i % colors.length]; confEl.append(e); return { e, a: rnd() * Math.PI * 2, v: 300 + rnd() * 800, s: 10 + rnd() * 16, r: rnd() * 360, d: rnd() * 0.25 }; });
+
+const phoneSpec = (s, which) => {
+  if (s.side === 'right') return which === 0 ? { x: 1180, y: 42, rot: -13 } : null;
+  if (s.side === 'left') return which === 0 ? { x: 330, y: 42, rot: 13 } : null;
+  if (s.side === 'two') return which === 0 ? { x: 160, y: 120, rot: 10 } : { x: 700, y: 20, rot: 4 };
+  return null;
+};
+
+window.__seek = (t) => {
+  put($('glow'), 0.9 * eOut(prog(t, 1.0, 3.0)) * (1 - prog(t, 54.8, 55.8)));
+  const g = $('grid'); g.style.opacity = 0.55 * prog(t, 0, 2) * (1 - prog(t, 55.0, 56.0)); g.style.transform = `translate(${-((t * 12) % 56)}px, ${-((t * 7) % 56)}px)`;
+
+  S.forEach((s) => {
+    const inA = s.a + 0.15, outA = s.b - 0.55;
+    const pin = (d) => eOut(prog(t, inA + d, inA + d + 0.7)), pout = eIO(prog(t, outA, s.b - 0.05));
+    const o = 1 - pout;
+    if (s.id === 'hook') {
+      [[s.e1, 0.3], [s.e2, 1.2], [s.e3, 2.5]].forEach(([e, a]) => { const p = eOut(prog(t, a, a + 0.9)); put(e, p * o, 0, lerp(40, 0, p) - pout * 20, 1, lerp(18, 0, p) + pout * 8); });
+      return;
+    }
+    if (s.id === 'end') return;
+    const active = t >= s.a - 0.05 && t < s.b + 0.05;
+    s.t.style.display = active ? 'block' : 'none';
+    const kids = s.t.children;
+    [[0, 0], [1, 0.12], [2, 0.34]].forEach(([k, d]) => {
+      const p = pin(d), bl = (1 - p) * 14 + pout * 8;
+      kids[k].style.opacity = p * o;
+      kids[k].style.transform = `translateY(${lerp(34, 0, p) - pout * 24}px)`;
+      kids[k].style.filter = bl > 0.05 ? `blur(${bl}px)` : 'none';
+    });
+    if (s.chipEls) s.chipEls.forEach((c, i) => { const p = eOut(prog(t, inA + 1.6 + i * 0.12, inA + 2.2 + i * 0.12)); c.style.opacity = p * o; c.style.transform = `translateY(${(1 - p) * 20}px)`; });
+    if (s.stepEls) s.stepEls.forEach((c, i) => { const p = eOut5(prog(t, inA + 1.8 + i * 0.5, inA + 2.4 + i * 0.5)); c.style.opacity = p * o; c.style.transform = `translateX(${(1 - p) * -40}px)`; });
+    if (s.icon) { const p = eOut5(prog(t, inA, inA + 0.9)); put(s.icon, p * o, 0, (1 - p) * 40, lerp(.85, 1, p), (1 - p) * 10); }
+    if (s.tileEls) s.tileEls.forEach((tile, i) => {
+      const a = inA + 0.9 + i * 0.1, p = eBack(prog(t, a, a + 0.55)), col = i % 4, row = Math.floor(i / 4);
+      put(tile, clamp(p * 1.4) * o, 270 + col * 360, 420 + row * 330 + (1 - p) * 90 + pout * 40, lerp(.7, 1, clamp(p, 0, 1.2)));
+    });
+    if (s.confetti) {
+      const burst = prog(t, s.confetti, s.confetti + 1.5);
+      conf.forEach((c) => {
+        const k = clamp((burst - c.d) / (1 - c.d)); const dist = c.v * eOut(k), gr = 520 * k * k;
+        c.e.style.opacity = k > 0 ? (1 - Math.pow(k, 2.2)) * (t < s.b ? 1 : 0) : 0;
+        c.e.style.transform = `translate(${1410 + Math.cos(c.a) * dist}px, ${470 + Math.sin(c.a) * dist + gr}px) rotate(${c.r + k * 420}deg) scale(${c.s / 22})`;
+      });
+    }
+  });
+
+  // Телефони: вага видимості за сценами; на межі двох сцен з телефоном положення плавно переходить
+  phones.forEach((ph, which) => {
+    let sw = 0, x = 0, y = 0, rot = 0;
+    S.forEach((s) => {
+      const sp = phoneSpec(s, which);
+      if (!sp) return;
+      const w = eIO(prog(t, s.a - 0.55, s.a + 0.45)) * (1 - eIO(prog(t, s.b - 0.45, s.b + 0.55)));
+      sw += w; x += sp.x * w; y += sp.y * w; rot += sp.rot * w;
+    });
+    if (sw < 0.002) { ph.el.style.opacity = 0; return; }
+    x /= sw; y /= sw; rot /= sw;
+    const op = clamp(sw), off = (1 - op) * 760;
+    const wob = Math.sin(t * 1.1 + which) * 2.2, flt = Math.sin(t * 1.3 + which * 2) * 7;
+    ph.el.style.opacity = op;
+    ph.el.style.transform = `translate(${x}px, ${y + off + flt}px) rotateY(${rot + wob}deg) scale(${lerp(.9, 1, op)})`;
+    ph.imgs.forEach((im) => { const ap = prog(t, im.at, im.at + 0.4), dis = im.end < 1e8 ? prog(t, im.end, im.end + 0.4) : 0; im.img.style.opacity = ap * (1 - dis); });
+  });
+
+  // Кінцівка: хвиля клітинки, логотип, підпис
+  const wipe = eIO(prog(t, 55.9, 56.8));
+  $('paper').style.clipPath = `circle(${wipe * 1500}px at 50% 52%)`;
+  const li = eOut5(prog(t, 56.4, 57.2)); put($('logo'), li, 0, lerp(40, 0, li), lerp(.92, 1, li), lerp(16, 0, li));
+  const t1 = eOut(prog(t, 56.8, 57.4)); put($('tag1'), t1, 0, lerp(24, 0, t1));
+  const t2 = eOut(prog(t, 57.1, 57.7)); put($('tag2'), t2, 0, lerp(24, 0, t2));
+};
+window.__ready = document.fonts.ready.then(() => Promise.all([...document.images].map((i) => i.decode().catch(() => {}))));
+window.__seek(0);
+</script>
+</body></html>

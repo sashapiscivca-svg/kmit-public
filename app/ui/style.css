@@ -1,0 +1,661 @@
+/* Kmit: український шкільний зошит у клітинку. Вдень папір, кулькова ручка й червона ручка вчителя; вночі шкільна
+   дошка з крейдою. Концепція й принципи: docs/design-principles.md.
+   Шрифти Manrope (інтерфейс) і Caveat (рукописні заголовки), обидва SIL OFL, див. fonts/. */
+@font-face { font-family: Manrope; font-weight: 400; src: url(fonts/Manrope-400.ttf) format('truetype'); font-display: swap; }
+@font-face { font-family: Manrope; font-weight: 600; src: url(fonts/Manrope-600.ttf) format('truetype'); font-display: swap; }
+@font-face { font-family: Manrope; font-weight: 800; src: url(fonts/Manrope-800.ttf) format('truetype'); font-display: swap; }
+@font-face { font-family: Caveat; font-weight: 700; src: url(fonts/Caveat-700.ttf) format('truetype'); font-display: swap; }
+
+:root {
+  /* Папір */
+  --paper: #f3f7fb; --grid: #d3e0ee; --sheet: #ffffff; --sheet2: #eaf1f9;
+  --ink: #1b2a6b; --ink-soft: #4a5a96; --line: #b9c9dc;
+  --pen: #2b4bd6; --pen-ink: #ffffff; --pen-soft: #dfe7ff;
+  --teacher: #d93a2f; --teacher-soft: #fde6e3; --marker: #ffd23f; --marker-soft: #fff3c2;
+  --ok: #13875f; --ok-soft: #d9f3e8; --warn: #8a4b00;
+  --focus: #0b57d0; --scale: 1;
+  --on-marker: #1b2a6b; --on-ok: #ffffff; --on-teacher: #ffffff; --lh: 1.6rem;
+  /* Обкладинки предметів */
+  --c-math: #2f5bea; --c-ukrainian: #f2b705; --c-english: #e0453a; --c-history: #c8742b;
+  --c-nature: #2e9b5f; --c-informatics: #1b9aaa; --c-literature: #7b4fc9;
+  --c-biology: #4c9a2a; --c-geography: #2a7fba; --c-physics: #5a4fcf; --c-chemistry: #c2410c;
+  --on-cover: #ffffff; --on-ukrainian: #1b2a6b;
+  --r1: 6px; --r2: 12px; --r3: 20px;
+  --font: Manrope, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  --hand: Caveat, "Segoe Print", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14211f; --grid: #223633; --sheet: #1b2b28; --sheet2: #22362f;
+    --ink: #f1eee3; --ink-soft: #b8c4bd; --line: #3a524c;
+    --pen: #8fb8ff; --pen-ink: #0f1d33; --pen-soft: #243a5c;
+    --teacher: #ff8a7a; --teacher-soft: #4a2622; --marker: #ffd96b; --marker-soft: #4a4020;
+    --ok: #6fd6a6; --ok-soft: #1c3d31; --warn: #ffcf8a; --focus: #8ab4ff;
+    --c-math: #4f7bff; --c-english: #ef6a5e; --c-history: #d98a45; --c-nature: #43b374; --c-informatics: #2fb3c3; --c-literature: #9a73e0; --c-biology: #6cbf45; --c-geography: #4ba3e0; --c-physics: #8479ee; --c-chemistry: #f07a3e;
+    --on-ok: #0f2a1f; --on-teacher: #3a0f0a; --on-cover: #0f1d33;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --on-ok: #0f2a1f; --on-teacher: #3a0f0a; --on-cover: #0f1d33;
+  --paper: #14211f; --grid: #223633; --sheet: #1b2b28; --sheet2: #22362f;
+  --ink: #f1eee3; --ink-soft: #b8c4bd; --line: #3a524c;
+  --pen: #8fb8ff; --pen-ink: #0f1d33; --pen-soft: #243a5c;
+  --teacher: #ff8a7a; --teacher-soft: #4a2622; --marker: #ffd96b; --marker-soft: #4a4020;
+  --ok: #6fd6a6; --ok-soft: #1c3d31; --warn: #ffcf8a; --focus: #8ab4ff;
+  --c-math: #4f7bff; --c-english: #ef6a5e; --c-history: #d98a45; --c-nature: #43b374; --c-informatics: #2fb3c3; --c-literature: #9a73e0; --c-biology: #6cbf45; --c-geography: #4ba3e0; --c-physics: #8479ee; --c-chemistry: #f07a3e;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { font-size: calc(16px * var(--scale)); -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; min-height: 100vh; color: var(--ink); font-family: var(--font); font-size: 1rem; line-height: 1.55;
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px; background-position: -1px -1px;
+}
+main {
+  max-width: 44rem; margin: 0 auto; outline: none; position: relative;
+  padding: calc(1rem + env(safe-area-inset-top)) calc(1rem + env(safe-area-inset-right)) calc(3rem + env(safe-area-inset-bottom)) calc(1rem + env(safe-area-inset-left));
+}
+@media (min-width: 48rem) {
+  /* Поле зошита: червона подвійна лінія зліва */
+  main::before { content: ""; position: fixed; top: 0; bottom: 0; left: max(calc(1rem + env(safe-area-inset-left, 0px)), calc(50% - 24rem)); width: 6px; border-left: 2px solid var(--teacher); border-right: 2px solid var(--teacher); opacity: .5; pointer-events: none; }
+}
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 1rem; top: 1rem; background: var(--sheet); padding: .5rem; z-index: 10; border-radius: var(--r2); }
+
+h1, h2, h3 { margin: 0; text-wrap: balance; }
+h1 { font-size: 1.75rem; font-weight: 800; line-height: 1.15; letter-spacing: -.02em; }
+h2 { font-size: 1.375rem; font-weight: 800; line-height: 1.2; margin-block: 1.75rem .75rem; }
+h3 { font-size: 1.125rem; font-weight: 800; margin-block: 1rem .5rem; }
+.hand { font-family: var(--hand); font-weight: 700; letter-spacing: 0; }
+p { margin: .5rem 0; }
+.muted { color: var(--ink-soft); }
+.hint { color: var(--ink-soft); font-size: .875rem; margin: .35rem 0 0; }
+:focus { outline: 3px solid var(--focus); outline-offset: 3px; }
+main:focus { outline: none; }
+svg { display: block; flex: none; }
+
+/* ----- Кнопки: чорнильна обводка й жорстка тінь, тиснуться вниз ----- */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: .5rem; min-height: 52px; min-width: 52px; padding: .6rem 1.1rem;
+  font: inherit; font-weight: 800; color: var(--ink); background: var(--sheet); text-decoration: none; cursor: pointer;
+  border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink);
+  transition: transform .06s ease, box-shadow .06s ease, background-color .12s ease;
+}
+.btn:hover { background: var(--pen-soft); }
+.btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.btn.primary { background: var(--pen); color: var(--pen-ink); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.good { background: var(--ok); color: #fff; }
+.btn.danger { color: var(--teacher); border-color: var(--teacher); box-shadow: 0 4px 0 var(--teacher); }
+.btn.quiet { border-color: transparent; background: transparent; box-shadow: none; text-decoration: underline; text-underline-offset: 3px; }
+.btn.quiet:active { transform: none; }
+.btn.icon { padding: .5rem; width: 52px; }
+.btn.big { min-height: 64px; font-size: 1.125rem; width: 100%; }
+.row { display: flex; flex-wrap: wrap; gap: .875rem; margin-block: 1rem; }
+.row > .btn { flex: 1 1 10rem; }
+.stack { display: grid; gap: 1rem; }
+
+/* ----- Аркуш ----- */
+.card { background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 3px 0 var(--ink); padding: 1rem; }
+.toolbar { display: flex; justify-content: space-between; align-items: flex-start; gap: .75rem; margin-bottom: 1rem; }
+.toolbar h1 { padding-top: .35rem; }
+
+/* ----- Вхід ----- */
+.logo, .nametag h1.who { margin-block: 0; letter-spacing: normal; }
+.logo { font-family: var(--hand); font-weight: 700; font-size: 4rem; line-height: 1; color: var(--pen); margin: .75rem 0 0; transform: rotate(-2deg); transform-origin: left; text-shadow: 0 3px 0 var(--ink); }
+.profiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr)); gap: 1rem; }
+.profile { flex-direction: column; min-height: 9.5rem; padding: 1rem .5rem; font-size: 1rem; border-radius: var(--r3); }
+.avatar { display: inline-grid; border-radius: 50%; overflow: hidden; border: 2px solid var(--ink); background: var(--sheet2); width: 4.5rem; height: 4.5rem; }
+.avatar svg { width: 100%; height: 100%; }
+.avatars { display: flex; flex-wrap: wrap; gap: .75rem; }
+.avatars .btn { width: 4.75rem; height: 4.75rem; padding: 0; border-radius: 50%; overflow: hidden; }
+.avatars .btn svg { width: 100%; height: 100%; }
+.avatars .btn[aria-pressed=true] { background: var(--marker); outline: 3px solid var(--ink); outline-offset: 2px; }
+
+.field { margin-block: 1.25rem; }
+.field label { display: block; font-weight: 800; margin-bottom: .4rem; }
+input[type=text], input[type=password], input[type=number], input[type=file], input[type=time], select, textarea {
+  width: 100%; min-height: 52px; padding: .6rem .9rem; font: inherit; color: var(--ink); background: var(--sheet);
+  border: 2px solid var(--ink); border-radius: var(--r2);
+}
+input:focus, textarea:focus { background: var(--marker-soft); }
+
+.notice { padding: .8rem 1rem; border-radius: var(--r2); margin-block: .875rem; border: 2px solid var(--line); background: var(--sheet); }
+.notice.error { background: var(--teacher-soft); border-color: var(--teacher); }
+.notice.warn { background: var(--marker-soft); border-color: var(--ink); }
+.notice.good { background: var(--ok-soft); border-color: var(--ok); }
+.code { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem .9rem; font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 1.45rem; letter-spacing: .08em; padding: 1.1rem; background: var(--marker-soft); border: 2px dashed var(--ink); border-radius: var(--r2); user-select: all; font-weight: 700; }
+.code span { white-space: nowrap; }
+
+/* ----- Головний екран: бирка зошита й зошити-предмети ----- */
+.nametag { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.1rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink); position: relative; }
+.nametag .avatar { width: 4.75rem; height: 4.75rem; }
+.nametag .small { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.nametag .who { font-family: var(--hand); font-weight: 700; font-size: 2.5rem; line-height: 1; margin-top: .15rem; text-decoration: underline wavy var(--teacher); text-decoration-thickness: 2px; text-underline-offset: 6px; }
+.nametag .count { margin-top: .5rem; display: inline-flex; align-items: center; gap: .4rem; font-weight: 800; font-size: .875rem; }
+.covers { display: grid; grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr)); gap: 1rem; margin-top: 1rem; }
+.cover { --c: var(--c-math); --on: var(--on-cover); position: relative; display: flex; flex-direction: column; justify-content: space-between; gap: .75rem; text-align: left; min-height: 11.5rem; padding: 1rem .9rem 1rem 1.9rem; font: inherit; cursor: pointer;
+  color: var(--on); background: var(--c); border: 2px solid var(--ink); border-radius: var(--r1) var(--r3) var(--r3) var(--r1); box-shadow: 0 5px 0 var(--ink); transition: transform .06s ease, box-shadow .06s ease; }
+.cover:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--ink); }
+.cover::before { content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 1.1rem; background: rgba(0, 0, 0, .18); border-right: 2px solid var(--ink); border-radius: var(--r1) 0 0 var(--r1);
+  background-image: radial-gradient(circle at 50% 50%, rgba(255, 255, 255, .85) 0 2.5px, transparent 3px); background-size: 100% 1.4rem; background-position: 0 .5rem; }
+.cover.s-ukrainian { --c: var(--c-ukrainian); --on: var(--on-ukrainian); }
+.cover.s-english { --c: var(--c-english); } .cover.s-history { --c: var(--c-history); } .cover.s-nature { --c: var(--c-nature); }
+.cover.s-informatics { --c: var(--c-informatics); } .cover.s-literature { --c: var(--c-literature); }
+.cover.s-biology { --c: var(--c-biology); } .cover.s-geography { --c: var(--c-geography); } .cover.s-physics { --c: var(--c-physics); } .cover.s-chemistry { --c: var(--c-chemistry); }
+.cover .label { background: var(--sheet); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--r1); padding: .45rem .55rem; transform: rotate(-1.5deg); }
+.cover .label .ico { display: flex; align-items: center; gap: .4rem; color: var(--ink); }
+.cover .label { min-width: 0; overflow: hidden; }
+.cover .label .name { font-family: var(--hand); font-weight: 700; font-size: clamp(1.1rem, 5.2vw, 1.5rem); line-height: 1.05; margin-top: .2rem; overflow-wrap: anywhere; hyphens: auto; }
+.cover .meta2 { display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-weight: 800; font-size: .8125rem; }
+.ticks { display: flex; gap: 3px; flex-wrap: wrap; }
+.ticks i { width: 10px; height: 10px; border-radius: 2px; border: 1.5px solid var(--on); opacity: .9; }
+.ticks i.on { background: var(--on); }
+.cover .done { background: var(--sheet); color: var(--ok); border: 2px solid var(--ink); border-radius: 99px; padding: .1rem .5rem; font-size: .75rem; }
+.shortcuts { display: grid; grid-template-columns: repeat(2, 1fr); gap: .875rem; margin-top: 1.5rem; }
+@media (min-width: 40rem) { .shortcuts { grid-template-columns: repeat(4, 1fr); } }
+.shortcuts .btn { flex-direction: column; gap: .35rem; min-height: 5.25rem; font-size: .9375rem; }
+.resume { display: flex; align-items: center; gap: .75rem; margin-top: 1rem; }
+
+/* ----- Предмет і теми: маршрут ----- */
+.subject-head { --c: var(--c-math); --on: var(--on-cover); display: flex; align-items: center; gap: 1rem; padding: 1rem; color: var(--on); background: var(--c); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink); }
+.subject-head.s-ukrainian { --c: var(--c-ukrainian); --on: var(--on-ukrainian); } .subject-head.s-english { --c: var(--c-english); }
+.subject-head.s-history { --c: var(--c-history); } .subject-head.s-nature { --c: var(--c-nature); }
+.subject-head.s-informatics { --c: var(--c-informatics); } .subject-head.s-literature { --c: var(--c-literature); }
+.subject-head.s-biology { --c: var(--c-biology); } .subject-head.s-geography { --c: var(--c-geography); } .subject-head.s-physics { --c: var(--c-physics); } .subject-head.s-chemistry { --c: var(--c-chemistry); }
+.subject-head .ico { width: 3.5rem; height: 3.5rem; display: grid; place-items: center; background: var(--sheet); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--r2); flex: none; }
+.subject-head h1 { font-family: var(--hand); font-size: 2.5rem; font-weight: 700; letter-spacing: 0; }
+.path { list-style: none; margin: 1.25rem 0 0; padding: 0; position: relative; display: grid; gap: .875rem; }
+.path::before { content: ""; position: absolute; left: 1.55rem; top: 1.5rem; bottom: 1.5rem; border-left: 3px dotted var(--ink-soft); }
+.node { position: relative; width: 100%; display: flex; align-items: center; gap: 1rem; text-align: left; padding: .7rem 1rem .7rem .7rem; font: inherit; color: var(--ink); background: var(--sheet); cursor: pointer; border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 3px 0 var(--ink); min-height: 4.25rem; }
+.node:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--ink); }
+.node .dot { width: 2.25rem; height: 2.25rem; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; flex: none; background: var(--sheet); color: var(--ink); }
+.node .name { font-weight: 800; line-height: 1.25; }
+.node .state { font-size: .8125rem; color: var(--ink-soft); font-weight: 600; }
+.node.mastered .dot { background: var(--ok); color: #fff; }
+.node.in_progress .dot { background: var(--marker); color: #1b2a6b; }
+.node.available .dot { background: var(--pen-soft); }
+.node.locked { background: var(--sheet2); box-shadow: 0 3px 0 var(--line); border-color: var(--line); color: var(--ink-soft); }
+.node.locked .dot { border-color: var(--line); color: var(--ink-soft); }
+.pill { display: inline-block; padding: .05rem .55rem; border-radius: 99px; background: var(--marker); color: #1b2a6b; border: 1.5px solid var(--ink); font-size: .75rem; font-weight: 800; }
+
+/* ----- Задача ----- */
+.chips-row { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-bottom: .75rem; }
+.chip-tag { display: inline-flex; align-items: center; gap: .4rem; font-size: .8125rem; font-weight: 800; padding: .2rem .7rem; border-radius: 99px; background: var(--sheet); border: 2px solid var(--ink); max-width: 68%; min-width: 0; }
+.chip-tag .t { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.meta { display: flex; justify-content: space-between; gap: .5rem; align-items: center; font-weight: 800; font-size: .8125rem; margin-bottom: .75rem; }
+.statement { margin: 0; padding: 1.25rem 1.25rem 1.25rem 1.5rem; font-size: 1.625rem; font-weight: 800; line-height: 1.4; letter-spacing: -.01em; font-variant-numeric: tabular-nums;
+  background-color: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px); background-size: 100% 2.275rem; background-position: 0 1.35rem; position: relative; }
+.statement::before { content: ""; position: absolute; left: .8rem; top: 0; bottom: 0; border-left: 2px solid var(--teacher); opacity: .6; }
+.steps { margin: .5rem 0 1rem; padding-left: 1.4rem; }
+.steps li { margin: .4rem 0; }
+.hintbox { padding: .75rem 1rem; background: var(--marker-soft); border: 2px solid var(--ink); border-radius: var(--r2); margin-block: .875rem; position: relative; }
+.hintbox strong:first-child { background: var(--marker); padding: 0 .35rem; border-radius: 3px; color: #1b2a6b; }
+input.answer { font-size: 2rem; font-weight: 800; text-align: center; letter-spacing: .03em; font-variant-numeric: tabular-nums; min-height: 68px; border-radius: var(--r2); background: var(--sheet); }
+.keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: .625rem; margin: .75rem 0 1rem; }
+.keypad .btn { min-height: 56px; font-size: 1.5rem; padding: .25rem; font-variant-numeric: tabular-nums; box-shadow: 0 3px 0 var(--ink); }
+.choices { display: grid; gap: .75rem; margin-block: 1rem; }
+.choices .btn { justify-content: flex-start; text-align: left; font-size: 1.0625rem; min-height: 60px; padding-block: .7rem; }
+.letter { display: inline-grid; place-items: center; width: 2.1rem; height: 2.1rem; border-radius: 50%; border: 2px solid var(--ink); background: var(--marker); color: var(--on-marker); flex: none; font-weight: 800; }
+
+/* ----- Відгук: штамп і наліпки ----- */
+.feedback-top { display: grid; justify-items: center; gap: .75rem; padding: 1.5rem .5rem 1rem; text-align: center; }
+.feedback-top .muted { margin: 0; font-weight: 600; }
+.stamp { display: inline-flex; align-items: center; gap: .6rem; padding: .35rem 1rem; font-family: var(--hand); font-weight: 700; font-size: 2.25rem; line-height: 1.1; color: var(--ok); border: 4px double var(--ok); border-radius: var(--r2); transform: rotate(-6deg); animation: stamp .42s cubic-bezier(.2, 1.2, .4, 1) both; }
+.stamp.miss { color: var(--teacher); border-color: var(--teacher); }
+.stamp.note { color: var(--ink); border-color: var(--ink); background: var(--marker-soft); }
+@keyframes stamp { from { transform: scale(1.9) rotate(-16deg); opacity: 0; } to { transform: scale(1) rotate(-6deg); opacity: 1; } }
+.stickers { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.75rem, 1fr)); gap: .875rem; }
+.sticker { display: flex; flex-direction: column; align-items: center; gap: .4rem; text-align: center; padding: .9rem .6rem; font-size: .8125rem; line-height: 1.3; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); }
+.sticker strong { font-size: .875rem; }
+.album-row { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding: .6rem .9rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); }
+.album-row + .album-row { margin-top: .625rem; }
+.album-row .title { font-weight: 800; line-height: 1.25; min-width: 0; }
+.slots { display: flex; gap: .4rem; flex: none; }
+.slot { width: 2.9rem; height: 2.9rem; display: grid; place-items: center; border-radius: 50%; border: 2px dashed var(--line); background: transparent; }
+.slot.earned { border: 2px solid var(--ink); background: var(--marker-soft); }
+.slot:not(.earned) svg:not(.creature) { opacity: .22; filter: grayscale(1); }
+.sticker.earned { box-shadow: 0 3px 0 var(--ink); transform: rotate(-1deg); }
+.sticker.earned:nth-child(even) { transform: rotate(1.2deg); }
+.sticker.empty { border-style: dashed; border-color: var(--line); color: var(--ink-soft); background: transparent; }
+.sticker.empty svg { opacity: .25; filter: grayscale(1); }
+.pop { animation: pop .5s cubic-bezier(.2, 1.3, .4, 1) both; }
+@keyframes pop { from { transform: scale(.4) rotate(-12deg); opacity: 0; } to { opacity: 1; } }
+html.calm .pop, html.calm .stamp, html.calm * { animation: none !important; transition: none !important; }
+@media (prefers-reduced-motion: reduce) { .pop, .stamp, * { animation: none !important; transition: none !important; } }
+
+/* ----- Урок, конспект ----- */
+textarea.notes { min-height: 15rem; resize: vertical; line-height: var(--lh); background-image: linear-gradient(var(--grid) 1px, transparent 1px); background-size: 100% var(--lh); background-position: 0 calc(var(--lh) - 2px); background-attachment: local; }
+html.reading textarea.notes { --lh: 1.95rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .625rem; margin: .5rem 0 1rem; }
+.chip { min-height: 44px; font-size: .875rem; border-radius: 99px; box-shadow: 0 3px 0 var(--ink); }
+.lesson-block { margin-block: 1.25rem; }
+.example { background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); padding: 1rem; box-shadow: 0 3px 0 var(--ink); }
+.remember { background: var(--marker-soft); border: 2px solid var(--ink); border-radius: var(--r2); padding: .8rem 1rem; }
+.selfcheck { border: 2px dashed var(--ink); border-radius: var(--r2); padding: 1rem; background: var(--sheet); }
+.sheet h2 { border-bottom: 2px solid var(--ink); padding-bottom: .2rem; }
+.sheet ul { padding-left: 1.2rem; }
+input[type=checkbox] { width: 1.5rem; height: 1.5rem; vertical-align: middle; accent-color: var(--pen); }
+.row.tight { margin-block: .5rem; }
+h2.tight { margin-top: 0; }
+
+@media print {
+  .toolbar, .noprint, .skip { display: none !important; }
+  body { background: #fff; color: #000; }
+  .card { border: none; box-shadow: none; }
+  main::before { display: none; }
+}
+
+.avatars .avatar { width: 100%; height: 100%; border: 0; }
+.subject-head .muted-on { margin: .25rem 0 0; font-weight: 800; opacity: .95; }
+.cover .meta2 { }
+.toolbar > .btn.icon { order: -1; flex: none; }
+.toolbar { align-items: center; }
+.toolbar h1 { padding-top: 0; flex: 1; min-width: 0; }
+.prose p { margin: 0; font-size: 1.0625rem; line-height: 1.65; }
+.center { text-align: center; font-weight: 700; }
+.big-cover { width: 100%; min-height: 9rem; margin-block: 1.25rem; }
+.big-cover .label .name { font-size: 1.9rem; }
+
+.check { display: flex; align-items: center; gap: .875rem; padding: .8rem 1rem; margin-block: .625rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); cursor: pointer; font-weight: 600; }
+.check input { flex: none; width: 1.6rem; height: 1.6rem; }
+.action { display: flex; align-items: center; gap: 1rem; width: 100%; text-align: left; padding: 1rem; font: inherit; color: var(--ink); background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink); cursor: pointer; }
+.action:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
+.action .ico { width: 3rem; height: 3rem; display: grid; place-items: center; flex: none; border: 2px solid var(--ink); border-radius: 50%; background: var(--marker); color: #1b2a6b; }
+.action.main .ico { background: var(--pen); color: var(--pen-ink); }
+.action .t { font-weight: 800; font-size: 1.0625rem; line-height: 1.25; }
+.action .d { font-size: .875rem; color: var(--ink-soft); font-weight: 600; }
+.chip { box-shadow: none; border-width: 2px; padding: .35rem .85rem; min-height: 40px; font-weight: 600; text-align: left; }
+.skill-head { display: flex; align-items: center; gap: .75rem; margin-block: .25rem 1rem; }
+.state-chip { display: inline-flex; align-items: center; gap: .4rem; padding: .2rem .75rem; border: 2px solid var(--ink); border-radius: 99px; background: var(--sheet); font-weight: 800; font-size: .8125rem; }
+.state-chip.mastered { background: var(--ok); color: #fff; }
+.state-chip.in_progress { background: var(--marker); color: #1b2a6b; }
+.state-chip.available { background: var(--pen-soft); }
+
+/* ----- Малюнки ----- */
+.figs { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; align-items: center; margin: .875rem 0; }
+.fig { max-width: 100%; height: auto; }
+.fig-fill { fill: var(--pen); stroke: var(--ink); stroke-width: 1.5; }
+.fig-empty { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.5; }
+.fig-line { stroke-width: 2.5; }
+.fig-stroke { stroke: var(--ink); stroke-width: 2.5; stroke-linecap: round; }
+.fig-stroke.accent { stroke: var(--teacher); }
+.fig-text { fill: var(--ink); }
+.figure-card { display: grid; justify-items: center; gap: .5rem; padding: 1rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); }
+.figure-card p { margin: 0; color: var(--ink-soft); font-weight: 600; text-align: center; }
+
+/* ----- Читабельний режим (більше повітря між рядками й літерами) ----- */
+html.reading body { line-height: 1.85; letter-spacing: .02em; word-spacing: .1em; }
+html.reading .btn, html.reading .statement, html.reading h1, html.reading h2 { letter-spacing: .01em; }
+html.reading .prose p, html.reading .lesson-block { line-height: 1.95; }
+
+/* ----- Вступ до теми, вибір із підтвердженням, впевненість ----- */
+.intro { text-align: center; display: grid; gap: .75rem; justify-items: center; }
+.intro .ico-big { width: 5rem; height: 5rem; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--ink); background: var(--marker); color: #1b2a6b; }
+.choices .btn[aria-pressed=true] { background: var(--sheet2); border-width: 3px; transform: translateY(2px); box-shadow: 0 0 0 3px var(--paper), 0 0 0 5px var(--ink); }
+.choices .btn[aria-pressed=true] .letter { background: var(--ink); color: var(--paper); }
+.confidence { display: flex; flex-wrap: wrap; gap: .5rem; margin: .5rem 0 1rem; }
+.confidence .btn { min-height: 44px; font-size: .9rem; border-radius: 99px; box-shadow: 0 3px 0 var(--ink); }
+.confidence .btn[aria-pressed=true] { background: var(--marker); color: #1b2a6b; }
+.support { display: grid; gap: .75rem; padding: 1rem; background: var(--marker-soft); border: 2px solid var(--ink); border-radius: var(--r2); margin-block: 1rem; }
+.support p { margin: 0; font-weight: 700; }
+.suggest { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem 1rem; padding: 1rem; background: var(--sheet); border: 2px dashed var(--ink); border-radius: var(--r2); margin-top: 1rem; }
+.suggest .txt { flex: 1 1 14rem; min-width: 0; }
+.suggest .tag { font-size: .75rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-soft); }
+.suggest .name { font-weight: 800; }
+
+/* ----- Уроки порціями ----- */
+.pager-dots { display: flex; gap: .4rem; justify-content: center; margin: .5rem 0 1rem; }
+.pager-dots i { width: .6rem; height: .6rem; border-radius: 50%; border: 2px solid var(--ink); background: transparent; }
+.pager-dots i.on { background: var(--ink); }
+.pager-nav { display: flex; gap: .875rem; margin-top: 1rem; }
+.pager-nav .btn { flex: 1; }
+
+/* ----- Спокій: дихання ----- */
+.breath { display: grid; place-items: center; margin: 1.5rem 0; }
+.breath .circle { width: 9rem; height: 9rem; border-radius: 50%; background: var(--pen-soft); border: 3px solid var(--ink); display: grid; place-items: center; font-family: var(--hand); font-weight: 700; font-size: 1.75rem; animation: breathe 8s ease-in-out infinite; }
+@keyframes breathe { 0%, 100% { transform: scale(.8); } 50% { transform: scale(1.12); } }
+html.calm .breath .circle { animation: none; transform: none; }
+.welcome { display: grid; gap: 1rem; text-align: center; justify-items: center; }
+.welcome .art { width: 8rem; height: 8rem; }
+.grade-row { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: center; }
+.grade-row .btn { min-width: 3.25rem; }
+.grade-row .btn[disabled] { opacity: .35; }
+
+/* ----- Ландшафт і низькі екрани ----- */
+@media (orientation: landscape) and (max-height: 520px) {
+  main { padding-top: .5rem; padding-bottom: 1.5rem; }
+  h1 { font-size: 1.4rem; }
+  .keypad { grid-template-columns: repeat(6, 1fr); }
+  .keypad .btn { min-height: 44px; font-size: 1.2rem; }
+  .statement { font-size: 1.3rem; padding: .8rem 1rem .8rem 1.3rem; }
+  .btn.big { min-height: 52px; }
+}
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.intro .ico-big { width: 5rem; height: 5rem; display: grid; place-items: center; border-radius: 50%; border: 2px solid var(--ink); background: var(--marker); color: #1b2a6b; }
+pre.licenses { white-space: pre-wrap; word-break: break-word; font-size: .8125rem; line-height: 1.5; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); padding: 1rem; max-height: 70vh; overflow: auto; }
+.weekbars { display: grid; grid-template-columns: repeat(7, 1fr); gap: .5rem; align-items: end; margin-bottom: .5rem; }
+.wbar { display: grid; gap: .25rem; text-align: center; font-size: .75rem; font-weight: 800; color: var(--ink-soft); }
+.wbar .col { height: 5.5rem; display: flex; align-items: flex-end; background: var(--sheet); border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
+.wbar .fill { display: block; width: 100%; background: var(--pen); }
+.wbar.on { color: var(--ink); }
+.grade-row .btn[aria-pressed=true] { background: var(--marker); color: #1b2a6b; }
+
+/* Урок і зошит */
+.pager-nav { flex-wrap: wrap; align-items: center; }
+.pager-nav .lock { flex-basis: 100%; margin: .25rem 0 0; color: var(--ink-soft); }
+@keyframes reveal { from { opacity: 0; transform: translateY(-.4rem); } to { opacity: 1; transform: none; } }
+.pop-in, .steps li.pop, p.pop { animation: reveal .25s ease-out; }
+@media (prefers-reduced-motion: reduce) { .pop-in, .steps li.pop, p.pop { animation: none; } }
+.term { padding: .5rem .8rem; border-left: 6px solid var(--marker); background: var(--marker-soft); border-radius: var(--r1); }
+.hook, .explain { background: var(--sheet2); border: 2px dashed var(--ink-soft); border-radius: var(--r2); padding: 1rem; }
+textarea.notes.short { min-height: 6rem; }
+.ideas { list-style: none; padding: 0; display: grid; gap: .5rem; }
+.ideas label { display: flex; gap: .6rem; align-items: flex-start; }
+.ideas input { width: 1.4rem; height: 1.4rem; flex: none; margin-top: .15rem; accent-color: var(--pen); }
+dl.terms { display: grid; gap: .4rem; margin: 0; }
+dl.terms dt { font-weight: 800; }
+dl.terms dd { margin: 0 0 .4rem; color: var(--ink-soft); }
+.notebook { display: grid; gap: 1.1rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); padding: 1rem 1rem 1rem 2.4rem; position: relative; box-shadow: 0 3px 0 var(--ink); }
+.notebook::before { content: ''; position: absolute; left: 1.6rem; top: 0; bottom: 0; width: 2px; background: var(--teacher); opacity: .6; }
+.nb-label { display: block; font-family: var(--hand); font-size: 1.5rem; line-height: 1.1; color: var(--pen); margin-bottom: .25rem; }
+.notebook textarea.notes { border: none; background-color: transparent; padding-inline: 0; }
+.notebook textarea.notes { min-height: 7rem; }
+
+/* Схеми */
+.diagram { width: 100%; max-width: 22rem; height: auto; }
+.fig-box { fill: var(--sheet); stroke: var(--ink); stroke-width: 1.8; }
+.fig-box.strong { fill: var(--sheet2); }
+.fig-head { fill: var(--pen); stroke: var(--ink); stroke-width: 1.8; }
+.fig-head + text, .fig-text.on-fill { fill: var(--pen-ink); }
+.fig-stroke.thin { stroke-width: 1.8; }
+.fig-set { stroke: var(--ink); stroke-width: 2; fill-opacity: .55; }
+.fig-set.a { fill: var(--marker); }
+.fig-set.b { fill: var(--pen-soft); }
+
+.ideas.plain { list-style: disc; padding-left: 1.4rem; display: block; }
+.row.wrap { flex-wrap: wrap; }
+
+.soon { text-align: center; }
+.soon ul { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; justify-content: center; }
+.soon li { background: var(--sheet2); border: 2px solid var(--ink); border-radius: 999px; padding: .2rem .8rem; font-weight: 600; }
+.btn.grade-chip { border: 2px solid var(--ink); border-radius: 999px; padding: .4rem 1rem; min-height: 44px; font-weight: 800; background: var(--sheet); text-decoration: none; }
+
+
+
+/* Повторення, план, профіль знань */
+.mem { display: inline-block; width: 7rem; max-width: 40%; height: .8rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--sheet); overflow: hidden; flex: none; }
+.mem .fill { display: block; height: 100%; }
+.mem .fill.good { background: var(--ok); }
+.mem .fill.mid { background: var(--marker); }
+.mem .fill.low { background: var(--teacher); }
+.mem .fill.learn { background: var(--pen); }
+.plan { margin-top: 1rem; }
+.plan-list, .rv-list, .pf-list { list-style: none; padding: 0; margin: 0; display: grid; gap: .6rem; }
+.plan-row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+.plan-row .ico { flex: none; width: 2.4rem; height: 2.4rem; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; background: var(--sheet2); }
+.plan-row .txt { flex: 1 1 11rem; min-width: 0; display: grid; }
+.plan-row .t { font-weight: 800; }
+.plan-row .d { color: var(--ink-soft); font-size: .85rem; }
+.plan-row.k-review .ico { background: var(--marker-soft); }
+.plan-row.k-fix .ico { background: var(--teacher-soft); }
+.btn.small { padding: .3rem .9rem; min-height: 0; }
+.rv-list li { display: flex; align-items: center; justify-content: space-between; gap: .75rem; }
+.rv-list .nm { min-width: 0; }
+.pf-btn { display: flex; align-items: center; gap: .75rem; width: 100%; text-align: left; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); padding: .6rem .8rem; color: var(--ink); font: inherit; cursor: pointer; }
+.pf-btn .nm { flex: 1; min-width: 0; display: grid; }
+.pf-btn .name { font-weight: 800; }
+.pf-btn .lbl { color: var(--ink-soft); font-size: .85rem; }
+.pf-row .dot { width: 1.8rem; height: 1.8rem; border-radius: 50%; border: 2px solid var(--ink); display: grid; place-items: center; flex: none; background: var(--sheet2); }
+.pf-row.l-strong .dot { background: var(--ok-soft); }
+.pf-row.l-weak .dot, .pf-row.l-repeat .dot { background: var(--teacher-soft); }
+.pf-row.l-fading .dot { background: var(--marker-soft); }
+.stickers-sum { display: flex; flex-wrap: wrap; gap: .5rem; margin: .5rem 0; }
+.pill.l-strong, .pill.l-weak, .pill.l-repeat, .pill.l-fading { color: var(--ink); }
+.pill.l-strong { background: var(--ok-soft); } .pill.l-weak, .pill.l-repeat { background: var(--teacher-soft); } .pill.l-fading { background: var(--marker-soft); }
+
+/* Граф пам'яті */
+.graph-wrap { overflow-x: auto; padding: .5rem 0; margin-block: .5rem; }
+.memory-graph { width: auto; max-width: none; min-width: max-content; }
+.graph-wrap:focus-visible { outline: 3px solid var(--marker); outline-offset: 2px; }
+.fig-box.has-gap { stroke: var(--teacher); stroke-width: 2.6; }
+.mem-good { fill: var(--ok); } .mem-mid { fill: var(--marker); } .mem-low { fill: var(--teacher); }
+.gap-dot { fill: var(--teacher); stroke: var(--ink); stroke-width: 1.5; }
+.gap-list { list-style: none; padding: 0; display: grid; gap: .75rem; }
+.gap-card .statement.small { font-size: 1.05rem; margin: .25rem 0 .5rem; }
+.gap-meta { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem; }
+.stage-dots { display: inline-flex; gap: .25rem; }
+.stage-dots i { width: .7rem; height: .7rem; border-radius: 50%; border: 2px solid var(--ink); }
+.stage-dots i.on { background: var(--ok); border-color: var(--ok); }
+.hard-return { display: flex; align-items: center; gap: .4rem; margin: .5rem 0; padding: .4rem .8rem; border-left: 5px solid var(--marker); background: var(--marker-soft); border-radius: var(--r1); font-weight: 600; }
+.gap-win { margin: 1rem 0; padding: 1rem; border: 3px solid var(--ok); background: var(--ok-soft); border-radius: var(--r2); text-align: center; }
+.gap-win strong { font-size: 1.25rem; }
+
+/* Герой і лінійка тижня */
+.hero-svg { image-rendering: pixelated; display: block; }
+.hero-stage { display: grid; justify-items: center; padding: 1rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink); margin-block: .75rem; }
+.nametag .hero-mini { flex: none; border: 2px solid var(--ink); border-radius: var(--r1); background: var(--sheet2); overflow: hidden; line-height: 0; }
+.ruler { width: 100%; max-width: 26rem; height: auto; display: block; margin: 0 auto; }
+.ruler-body { fill: var(--sheet2); stroke: var(--ink); stroke-width: 2; }
+.ruler-fill { fill: var(--marker); stroke: var(--ink); stroke-width: 2; }
+.ruler-tick { stroke: var(--ink); stroke-width: 1.6; }
+.ruler-num { fill: var(--ink); font: 800 10px var(--font); }
+.ruler-gem { fill: var(--sheet); stroke: var(--ink); stroke-width: 2; }
+.ruler-gem.got.common { fill: var(--pen); } .ruler-gem.got.rare { fill: var(--marker); } .ruler-gem.got.epic { fill: var(--teacher); }
+.item-grid, .pick-row { display: grid; grid-template-columns: repeat(auto-fill, minmax(8.2rem, 1fr)); gap: .75rem; }
+.item-card { display: grid; justify-items: center; gap: .3rem; text-align: center; padding: .6rem .4rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); }
+.item-card.locked .pv { filter: grayscale(1) brightness(.55); opacity: .75; }
+.item-card .pv { line-height: 0; background: var(--sheet2); border-radius: var(--r1); padding: .2rem; }
+.rar { font-size: .72rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; padding: .05rem .5rem; border-radius: 99px; border: 1.5px solid var(--ink); }
+.rar.common { background: var(--pen-soft); color: var(--ink); } .rar.rare { background: var(--marker); color: #1b2a6b; } .rar.epic { background: var(--teacher); color: #fff; }
+.item-card.r-rare { border-color: var(--marker); box-shadow: 0 0 0 2px var(--ink); }
+.item-card.r-epic { border-color: var(--teacher); box-shadow: 0 0 0 2px var(--ink); }
+.swatches { display: flex; flex-wrap: wrap; gap: .625rem; margin-bottom: .75rem; }
+.swatch { position: relative; width: 44px; height: 44px; border-radius: 50%; border: 2px solid var(--ink); cursor: pointer; padding: 0; }
+.swatch[aria-pressed=true] { outline: 3px solid var(--ink); outline-offset: 2px; }
+.swatch[aria-pressed=true]::after { content: "✓"; position: absolute; inset: 0; display: grid; place-items: center; font-weight: 900; font-size: 1.2rem; color: #fff; text-shadow: 0 0 3px #000, 0 0 3px #000; }
+.tabs { display: flex; gap: .4rem; overflow-x: auto; padding-bottom: .3rem; margin-block: .75rem; }
+.tabs .btn { flex: none; padding: .4rem 1rem; min-height: 44px; }
+.tabs { mask-image: linear-gradient(90deg, #000 92%, transparent); }
+.tabs.wrap { mask-image: none; }
+.tabs .btn[aria-selected=true] { background: var(--marker); color: #1b2a6b; }
+.reward-stage { display: grid; justify-items: center; gap: .5rem; padding: 1.5rem; background: var(--sheet); border: 3px solid var(--ink); border-radius: var(--r2); }
+.hand-big { font-family: var(--hand); font-size: 2.2rem; margin: 0; }
+.reward-pick { margin-block: 1rem; }
+
+.ruler-mini { display: flex; align-items: center; gap: .75rem; width: 100%; margin-top: .75rem; padding: .6rem .9rem; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); color: var(--ink); font: inherit; cursor: pointer; text-align: left; }
+.ruler-mini .rm-t { font-weight: 800; flex: 1; min-width: 0; }
+.ruler-mini .mem { width: 6rem; }
+.ruler-mini .rm-n { font-weight: 800; font-variant-numeric: tabular-nums; }
+.ruler-mini.claim { background: var(--marker-soft); border-width: 3px; animation: nudge 1.6s ease-in-out infinite; }
+@keyframes nudge { 50% { transform: translateY(-2px); } }
+@media (prefers-reduced-motion: reduce) { .ruler-mini.claim { animation: none; } }
+
+.creature { display: block; border-radius: 6px; }
+.album-row .slot .creature { width: 2.5rem; height: 2.5rem; }
+.album-row .slot.earned .creature { filter: drop-shadow(0 1px 0 var(--ink)); }
+.sticker .creature { margin: 0 auto; }
+
+.album-row .slot { border-radius: 8px; width: 2.9rem; height: 2.9rem; background: var(--sheet2); border-style: solid; border-color: var(--line); }
+.album-row .slot.earned { border-color: var(--ink); background: var(--sheet); }
+.slot:not(.earned) .creature { opacity: 1; filter: none; }
+
+/* Аркуш для вчителя на екрані */
+.sheet-doc { --acc: var(--c-math); display: grid; gap: .9rem; }
+.sheet-doc.s-ukrainian { --acc: var(--c-ukrainian); } .sheet-doc.s-english { --acc: var(--c-english); } .sheet-doc.s-history { --acc: var(--c-history); }
+.sheet-doc.s-nature { --acc: var(--c-nature); } .sheet-doc.s-informatics { --acc: var(--c-informatics); } .sheet-doc.s-literature { --acc: var(--c-literature); }
+.sheet-doc.s-biology { --acc: var(--c-biology); } .sheet-doc.s-geography { --acc: var(--c-geography); } .sheet-doc.s-physics { --acc: var(--c-physics); } .sheet-doc.s-chemistry { --acc: var(--c-chemistry); }
+.sheet-band { display: flex; justify-content: space-between; align-items: center; gap: 1rem; padding: 1.1rem 1.2rem; background: var(--acc); color: var(--on-cover); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 4px 0 var(--ink); }
+.sheet-doc.s-ukrainian .sheet-band { color: var(--on-ukrainian); }
+.sheet-band .kicker { margin: 0; font-size: .75rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+.sheet-band h2 { margin: 0; font-size: 2.6rem; line-height: 1; }
+.sheet-band p { margin: .15rem 0 0; }
+.sheet-band .small { font-size: .8rem; opacity: .9; }
+.sheet-hero { flex: none; background: #fff; border: 2px solid var(--ink); border-radius: var(--r1); padding: .25rem; line-height: 0; }
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(5.5rem, 1fr)); gap: .6rem; }
+.tile { display: grid; justify-items: center; padding: .6rem .3rem; border: 2px solid var(--ink); border-radius: var(--r2); color: var(--ink); text-align: center; }
+.tile strong { font-size: 1.6rem; line-height: 1; } .tile span { font-size: .72rem; color: var(--ink-soft); font-weight: 700; }
+.tile.t-ok { background: var(--ok-soft); } .tile.t-pen { background: var(--pen-soft); } .tile.t-mark { background: var(--marker-soft); } .tile.t-red { background: var(--teacher-soft); }
+.sheet-card { background: var(--sheet); border: 2px solid var(--ink); border-left-width: 10px; border-radius: var(--r2); padding: .8rem 1rem; }
+.sheet-card h2 { margin: 0 0 .4rem; font-size: 1.05rem; }
+.sheet-card ul { margin: 0; padding-left: 1.1rem; }
+.sheet-card.c-ok { border-left-color: var(--ok); } .sheet-card.c-pen { border-left-color: var(--pen); } .sheet-card.c-mark { border-left-color: var(--marker); }
+.sheet-card.c-red { border-left-color: var(--teacher); } .sheet-card.c-purple { border-left-color: var(--c-literature); }
+@media print { .sheet-band { box-shadow: none; } .noprint { display: none !important; } }
+/* Подяка */
+.thanks-preview { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .6rem 1.2rem; background: #fff8e1; border: 3px solid var(--teacher); border-radius: var(--r2); margin-block: .75rem; }
+.thanks-preview .hand-big { color: var(--teacher); font-size: 3rem; }
+.tp-hero { line-height: 0; background: #fff; border: 2px solid var(--ink); border-radius: var(--r1); padding: .2rem; }
+
+.legend { list-style: none; padding: 0; display: grid; gap: .5rem; }
+.legend li { display: flex; align-items: center; gap: .75rem; }
+.lg-art { flex: none; line-height: 0; border: 2px solid var(--ink); border-radius: 8px; overflow: hidden; }
+
+.btn.profile .hero-mini, .row .hero-mini { display: inline-block; line-height: 0; border: 2px solid var(--ink); border-radius: var(--r1); background: var(--sheet2); overflow: hidden; }
+.btn.profile { display: inline-flex; flex-direction: column; align-items: center; gap: .4rem; padding: .6rem .9rem; }
+.tabs .btn[aria-pressed=true] { background: var(--marker); color: #1b2a6b; }
+
+/* Верхня смуга головної й налаштування */
+.topbar { display: flex; align-items: center; gap: .5rem; margin-top: .6rem; }
+.topbar .spacer { flex: 1; }
+.set-group { margin-block: 1.1rem; display: grid; gap: .6rem; }
+.set-group h2 { margin: 0; font-size: 1.05rem; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .06em; }
+.set-group .check { background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); padding: .65rem .9rem; }
+.hint-inline { display: block; color: var(--ink-soft); font-size: .8rem; font-weight: 400; margin-top: .1rem; }
+.save-note { min-height: 1.4rem; margin: 0; color: var(--ok); font-weight: 800; text-align: right; }
+/* План: менше повітря */
+.plan.card { padding: .7rem .85rem; margin-top: .6rem; }
+.plan h2 { margin: 0 0 .25rem; font-size: 1.05rem; }
+.plan .hint { margin: 0 0 .45rem; font-size: .8rem; }
+.plan-list { gap: .45rem; }
+.plan-row { gap: .6rem; }
+.plan-row .ico { width: 2rem; height: 2rem; }
+.plan-row .t { font-size: .95rem; line-height: 1.25; }
+.plan-row .d { font-size: .78rem; line-height: 1.3; }
+.ruler-mini { margin-top: .5rem; padding: .45rem .8rem; }
+
+.tabs.wrap { flex-wrap: wrap; overflow: visible; }
+.set-group input[type=range] { width: 100%; accent-color: var(--pen); }
+
+/* ===== Виправлення за аудитом: уроки ===== */
+h1[tabindex]:focus, h2[tabindex]:focus { outline: none; }
+::placeholder { color: var(--ink-soft); opacity: 1; }
+.btn[disabled], .btn[aria-disabled=true], .btn.is-locked { background: var(--sheet2); color: var(--ink-soft); border-style: dashed; box-shadow: none; transform: none; opacity: 1; cursor: not-allowed; }
+.btn.wide { width: 100%; }
+.lp-progress { display: flex; align-items: center; gap: .75rem; margin: .5rem 0 1rem; }
+.lp-bar { flex: 1; height: .9rem; border: 2px solid var(--ink); border-radius: 999px; background: var(--sheet); overflow: hidden; }
+.lp-bar .fill { display: block; height: 100%; background: var(--pen); border-radius: 999px; }
+.lp-count { font-weight: 800; font-size: 1rem; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.lp-lockwrap { display: flex; align-items: flex-start; gap: .5rem; margin-top: 1rem; color: var(--ink); font-weight: 600; }
+.lp-lockwrap[hidden] { display: none; }
+.lp-lock { margin: 0; }
+.choices .btn.right { background: var(--ok-soft); border-color: var(--ok); }
+.choices .btn.right .letter { background: var(--ok); color: var(--on-ok); border-color: var(--ok); }
+.choices .btn.wrong { background: var(--teacher-soft); border-style: dashed; }
+.choices .btn.wrong .letter { background: var(--teacher); color: var(--on-teacher); border-color: var(--teacher); }
+.choices .btn.gone { opacity: .5; text-decoration: line-through; }
+.choices .btn[aria-disabled=true] { cursor: not-allowed; }
+.hintbox { margin: .6rem 0; padding: .6rem .8rem; background: var(--marker-soft); border-left: 5px solid var(--marker); border-radius: var(--r1); }
+.hintbox p { margin: 0 0 .4rem; }
+.own-text { margin: .5rem 0; padding: .5rem .8rem; border-left: 4px solid var(--pen); background: var(--sheet2); border-radius: var(--r1); }
+.correct-was { margin: .25rem 0 0; }
+.lesson-block .field { margin-block: .5rem; }
+.lp-finish .stamp-line { text-align: center; margin-block: .5rem; }
+.lesson-block { max-width: 44rem; }
+.pager-nav .btn { flex: 1; }
+
+/* Виправлення за аудитом: головна */
+.nametag button.count.linklike { background: none; border: 0; padding: .25rem 0; min-height: 44px; color: inherit; font: inherit; font-weight: 800; font-size: .875rem; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ----- Кабінет вчителя: «Класний журнал» (інша обкладинка, ті самі шрифти) ----- */
+html.role-teacher {
+  --paper: #f4efe1; --grid: #e2d9bd; --sheet: #fffdf6; --sheet2: #efe8d2;
+  --ink: #1d3b2f; --ink-soft: #4a6657; --line: #c9bf9f;
+  --pen: #1f6b4f; --pen-ink: #ffffff; --pen-soft: #dcefe5;
+  --teacher: #7a5500; --teacher-soft: #f6e7bd; --marker: #d9a21b; --marker-soft: #f5e6b8;
+  --on-marker: #1d3b2f; --focus: #0b57d0;
+  --cover-teacher: #1f4d3a; --cover-teacher-ink: #fdf3d4; --spine-teacher: #d9a21b;
+}
+@media (prefers-color-scheme: dark) {
+  html.role-teacher:not([data-theme="light"]) {
+    --paper: #0f1f18; --grid: #1a3027; --sheet: #162a21; --sheet2: #1d3529;
+    --ink: #f3ecd6; --ink-soft: #b9c9bd; --line: #355245;
+    --pen: #8fd6b0; --pen-ink: #0b2218; --pen-soft: #1f4535;
+    --teacher: #e8b84a; --teacher-soft: #3d3216; --marker: #e8b84a; --marker-soft: #3d3216;
+    --on-marker: #1a1500;
+    --cover-teacher: #1b4a38; --cover-teacher-ink: #fdf3d4; --spine-teacher: #e8b84a;
+  }
+}
+html.role-teacher[data-theme="dark"] {
+  --paper: #0f1f18; --grid: #1a3027; --sheet: #162a21; --sheet2: #1d3529;
+  --ink: #f3ecd6; --ink-soft: #b9c9bd; --line: #355245;
+  --pen: #8fd6b0; --pen-ink: #0b2218; --pen-soft: #1f4535;
+  --teacher: #e8b84a; --teacher-soft: #3d3216; --marker: #e8b84a; --marker-soft: #3d3216;
+  --on-marker: #1a1500;
+  --cover-teacher: #1b4a38; --cover-teacher-ink: #fdf3d4; --spine-teacher: #e8b84a;
+}
+html.role-teacher main::before { display: none; }
+.role-card { display: flex; flex-direction: column; gap: .25rem; width: 100%; text-align: left; padding: 1.1rem 1.1rem 1.1rem 1.6rem; min-height: 5.5rem; font: inherit; cursor: pointer; border: 2px solid var(--ink); border-radius: var(--r2); background: var(--sheet); color: var(--ink); box-shadow: 0 3px 0 var(--ink); position: relative; }
+.role-card::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: .8rem; border-right: 2px solid var(--ink); border-radius: var(--r2) 0 0 var(--r2); background: var(--pen); }
+.role-card.rc-teacher::before { background: #1f4d3a; border-color: var(--ink); }
+.role-card .rc-title { font-family: var(--hand); font-size: 1.7rem; font-weight: 700; line-height: 1.1; }
+.role-card .rc-text { color: var(--ink-soft); }
+.role-card:active { transform: translateY(3px); box-shadow: 0 0 0 var(--ink); }
+.profile-teacher { border-color: #1f4d3a; }
+.teacher-mini { display: grid; place-items: center; width: 56px; height: 56px; border-radius: var(--r1); background: #1f4d3a; color: #fdf3d4; border: 2px solid var(--ink); }
+.cabinet-cover { position: relative; padding: 1rem 1.1rem 1.2rem 2.1rem; border: 2px solid var(--ink); border-radius: var(--r2); background: var(--cover-teacher); color: var(--cover-teacher-ink); box-shadow: 0 4px 0 var(--ink); margin-bottom: 1rem; }
+.cabinet-cover::before { content: ""; position: absolute; left: 0; top: 0; bottom: 0; width: 1.1rem; background: var(--spine-teacher); border-right: 2px solid var(--ink); border-radius: var(--r2) 0 0 var(--r2); }
+.cabinet-cover .cc-top { display: flex; align-items: center; justify-content: space-between; gap: .5rem; }
+.cabinet-cover .cc-brand { font-weight: 800; letter-spacing: .04em; text-transform: uppercase; font-size: .8125rem; }
+.cabinet-cover .cc-title { font-family: var(--hand); font-size: 3rem; line-height: 1; margin: .4rem 0 .2rem; color: var(--cover-teacher-ink); }
+.cabinet-cover .cc-name { margin: 0; font-weight: 600; }
+.cabinet-cover .btn.icon { color: var(--cover-teacher-ink); border-color: var(--cover-teacher-ink); background: transparent; }
+.tile-card { display: flex; flex-direction: column; gap: .25rem; width: 100%; text-align: left; min-height: 4.5rem; padding: .9rem 1rem; font: inherit; cursor: pointer; background: var(--sheet); color: var(--ink); border: 2px solid var(--ink); border-radius: var(--r2); box-shadow: 0 3px 0 var(--ink); }
+.tile-card .tc-title { font-weight: 800; font-size: 1.1rem; display: flex; align-items: center; gap: .5rem; }
+.tile-card .tc-text { color: var(--ink-soft); }
+
+.checks { display: grid; gap: .25rem; padding-top: .5rem; }
+.checks .check { min-height: 44px; }
+.work-preview { padding-left: 1.4rem; }
+.work-preview li { margin-bottom: .35rem; }
+ul.plain { list-style: none; padding: 0; margin: 0; }
+ul.plain li { padding: .35rem 0; border-bottom: 1px dashed var(--line); }
+.teacher-correct { color: var(--pen); font-weight: 800; }
+.btn.link-row { width: 100%; justify-content: flex-start; text-align: left; min-height: 44px; }
+.snippet { display: block; font-weight: 400; font-size: .875rem; }
+.btn.link-row { flex-wrap: wrap; }
+input[type=search] { min-height: 44px; flex: 1 1 12rem; }
+
+/* Світи істот за класами й свято переходу */
+.album-world { border: 2px solid var(--ink); border-radius: var(--r2); padding: .6rem 1rem; margin: .6rem 0; background: var(--sheet2); }
+.album-world h2 { margin-top: 0; }
+.w-forest { background-color: rgba(58, 166, 106, .16); }
+.w-sea { background-color: rgba(42, 156, 200, .16); }
+.w-sky { background-color: rgba(154, 134, 232, .18); }
+.starter-row { display: flex; align-items: center; gap: .8rem; }
+.starter-art svg { width: 4rem; height: 4rem; display: block; }
+.ceremony { text-align: center; padding: 1rem; border-radius: var(--r3); border: 2px solid var(--ink); background-color: var(--sheet2); }
+.ceremony .big { font-size: 1.15rem; font-weight: 700; }
+.ceremony .row { justify-content: center; }
+.parade { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; margin: 1rem 0; padding: .6rem; border-radius: var(--r2); }
+.parade .hop { display: inline-block; animation: hop 1.6s ease-in-out infinite; }
+.parade svg { width: 3.2rem; height: 3.2rem; display: block; }
+.starter { display: grid; place-items: center; margin: 1rem 0; }
+.starter svg { width: 7.5rem; height: 7.5rem; animation: float 3.2s ease-in-out infinite; }
+@keyframes hop { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-.5rem); } }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-.35rem); } }
+.suggest.promote { border-color: var(--ok); }
+.w-cave { background-color: rgba(125, 107, 176, .18); }
+.w-desert { background-color: rgba(224, 160, 64, .18); }
+.w-space { background-color: rgba(74, 94, 200, .16); }
+.w-ice { background-color: rgba(110, 198, 232, .2); }
+.w-summit { background-color: rgba(224, 98, 58, .16); }
+.celebration { display: flex; gap: .9rem; align-items: flex-start; margin: .8rem 0; padding: .8rem 1rem; border: 2px solid var(--teacher); border-radius: var(--r2); background: var(--teacher-soft); }
+.celebration h2 { margin: 0 0 .2rem; }
+.celebration .owl { flex: none; width: 3.6rem; height: 3.6rem; display: block; animation: float 3.2s ease-in-out infinite; }
+.celebration .owl svg { width: 100%; height: 100%; }

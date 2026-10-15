@@ -1,0 +1,88 @@
+{
+  "_comment": "Дані для scripts/licenses.py: компоненти, яких немає в cargo metadata (C-бібліотеки, зібрані build-скриптами; бібліотеки Android/JVM; шрифти). Шляхи 'file' — відносно кореня репозиторію; 'crate'+'path' — файл усередині вихідного коду крейта з реєстру cargo. Тексти в scripts/third_party/ взято з офіційних дистрибутивів (Apache-2.0 — з OpenSSL, MPL-2.0 — з cssparser, NOTICE — з META-INF jar-файлів Jackson 2.15.3).",
+  "standard_texts": {
+    "Apache-2.0": {"title": "Apache License 2.0", "file": "scripts/third_party/Apache-2.0.txt"},
+    "MPL-2.0": {"title": "Mozilla Public License 2.0", "file": "scripts/third_party/MPL-2.0.txt"},
+    "MIT": {"title": "MIT License (текст дозволу; рядки Copyright — у записі кожного компонента)", "file": "scripts/third_party/MIT.txt"}
+  },
+  "c_libraries": [
+    {
+      "name": "SQLCipher", "version": "auto:sqlcipher", "license": "BSD-3-Clause",
+      "url": "https://www.zetetic.net/sqlcipher/", "requires_crate": "libsqlite3-sys",
+      "notes": ["Зашифрована база даних профілів. Вихідний код постачається в крейті libsqlite3-sys (функція bundled-sqlcipher) і статично компонується в застосунок."],
+      "texts": [{"crate": "libsqlite3-sys", "path": "sqlcipher/LICENSE"}]
+    },
+    {
+      "name": "SQLite", "version": "auto:sqlite", "license": "Public Domain",
+      "url": "https://sqlite.org/copyright.html", "requires_crate": "libsqlite3-sys",
+      "notes": ["Входить до SQLCipher. Автори SQLite (D. Richard Hipp та ін.) передали код у суспільне надбання (public domain); дякуємо їм."],
+      "texts": []
+    },
+    {
+      "name": "OpenSSL", "version": "auto:openssl", "license": "Apache-2.0",
+      "url": "https://www.openssl.org/", "requires_crate": "openssl-sys",
+      "notes": ["Криптографічна бібліотека для SQLCipher; зібрана з вихідного коду крейта openssl-src і статично скомпонована без змін."],
+      "copyright": [
+        "Copyright (c) 1998-2026 The OpenSSL Project Authors",
+        "Copyright (c) 1995-1998 Eric A. Young, Tim J. Hudson",
+        "Окремі частини: Copyright Nokia; Cryptography Research, Inc.; Ribose Inc.; Google Inc.; IBM Corp.; BaishanCloud; NTT (Nippon Telegraph and Telephone Corporation)."
+      ],
+      "texts": [{"crate": "openssl-src", "path": "openssl/LICENSE.txt"}]
+    }
+  ],
+  "android": {
+    "gradle_files": [
+      {"file": "app/src-tauri/gen/android/app/build.gradle.kts"},
+      {"crate": "tauri", "path": "mobile/android/build.gradle.kts"}
+    ],
+    "kotlin_plugin_file": "app/src-tauri/gen/android/build.gradle.kts",
+    "extra_artifacts": [
+      {"coord": "com.fasterxml.jackson.core:jackson-core", "version_like": "com.fasterxml.jackson.core:jackson-databind"},
+      {"coord": "com.fasterxml.jackson.core:jackson-annotations", "version_like": "com.fasterxml.jackson.core:jackson-databind"}
+    ],
+    "groups": [
+      {"prefix": "androidx.", "license": "Apache-2.0", "url": "https://developer.android.com/jetpack/androidx", "copyright": ["Copyright The Android Open Source Project"]},
+      {"prefix": "com.google.android.material:", "license": "Apache-2.0", "url": "https://github.com/material-components/material-components-android", "copyright": ["Copyright The Android Open Source Project"]},
+      {"prefix": "org.jetbrains.kotlin:", "license": "Apache-2.0", "url": "https://kotlinlang.org/", "copyright": ["Copyright 2010-2025 JetBrains s.r.o. and Kotlin Programming Language contributors"]},
+      {"prefix": "com.fasterxml.jackson.", "license": "Apache-2.0", "url": "https://github.com/FasterXML/jackson", "copyright": ["Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)"]}
+    ],
+    "artifact_texts": {
+      "com.fasterxml.jackson.core:jackson-core": [{"file": "scripts/third_party/NOTICE-jackson-core.txt", "kind": "NOTICE"}, {"file": "scripts/third_party/NOTICE-FastDoubleParser.txt", "kind": "NOTICE"}],
+      "com.fasterxml.jackson.core:jackson-databind": [{"file": "scripts/third_party/NOTICE-jackson.txt", "kind": "NOTICE"}],
+      "com.fasterxml.jackson.core:jackson-annotations": [{"file": "scripts/third_party/NOTICE-jackson.txt", "kind": "NOTICE"}],
+      "com.fasterxml.jackson.datatype:jackson-datatype-json-org": [{"file": "scripts/third_party/NOTICE-jackson-datatype-json-org.txt", "kind": "NOTICE"}]
+    },
+    "extra_components": [
+      {
+        "name": "tauri-android (бібліотека Android з крейта tauri)", "version": "auto:crate:tauri", "license": "Apache-2.0 OR MIT",
+        "url": "https://github.com/tauri-apps/tauri", "copyright": [],
+        "texts": [{"crate": "tauri", "path": "LICENSE-MIT"}, {"crate": "tauri", "path": "LICENSE-APACHE-2.0"}]
+      },
+      {
+        "name": "FastDoubleParser (у складі jackson-core)", "version": "", "license": "MIT",
+        "url": "https://github.com/wrandelshofer/FastDoubleParser", "copyright": ["Copyright © 2023 Werner Randelshofer, Switzerland"],
+        "texts": [{"std": "MIT"}]
+      },
+      {
+        "name": "fast_float, fast_double_parser (частини FastDoubleParser)", "version": "", "license": "Apache-2.0",
+        "url": "https://github.com/fastfloat/fast_float", "copyright": ["fast_double_parser, Copyright (c) 2022 Daniel Lemire", "fast_float, Copyright (c) 2021 The fast_float authors"],
+        "texts": [{"std": "Apache-2.0"}]
+      },
+      {
+        "name": "bigint (частина FastDoubleParser)", "version": "", "license": "BSD-2-Clause",
+        "url": "https://github.com/tbuktu/bigint", "copyright": [],
+        "texts": [{"file": "scripts/third_party/BSD-2-Clause-bigint.txt"}]
+      }
+    ],
+    "transitive_note": "Перелічено прямі залежності. Через них до застосунку також потрапляють інші бібліотеки AndroidX (core, fragment, lifecycle, savedstate тощо), kotlinx-coroutines, JSpecify, Error Prone annotations, Guava ListenableFuture та інші — усі вони поширюються за ліцензією Apache-2.0 (повний текст нижче)."
+  },
+  "fonts": [
+    {"name": "Manrope", "version": "", "license": "OFL-1.1", "url": "https://github.com/sharanda/manrope", "notes": ["Шрифт інтерфейсу та звітів PDF."], "copyright": ["Copyright 2018 The Manrope Project Authors (https://github.com/sharanda/manrope)"], "texts": [{"file": "app/ui/fonts/OFL-Manrope.txt", "kind": "WHOLE"}]},
+    {"name": "Caveat", "version": "", "license": "OFL-1.1", "url": "https://github.com/googlefonts/caveat", "notes": ["Шрифт інтерфейсу та звітів PDF."], "copyright": ["Copyright 2014 The Caveat Project Authors (https://github.com/googlefonts/caveat)"], "texts": [{"file": "app/ui/fonts/OFL-Caveat.txt", "kind": "WHOLE"}]},
+    {"name": "Liberation Sans", "version": "", "license": "OFL-1.1", "url": "https://github.com/liberationfonts/liberation-fonts", "notes": ["Вбудований у генератор звітів PDF (crates/report)."], "copyright": ["Digitized data copyright (c) 2010 Google Corporation with Reserved Font Arimo, Tinos and Cousine. Copyright (c) 2012 Red Hat, Inc. with Reserved Font Name Liberation."], "texts": [{"file": "crates/report/assets/LICENSE-LiberationSans.txt", "kind": "WHOLE"}]}
+  ],
+  "crate_overrides": {
+    "alloc-stdlib": {"texts_from_crate": "alloc-no-stdlib", "note": "У пакеті немає файла ліцензії; він з того самого репозиторію, що й alloc-no-stdlib, тож наведено його текст."},
+    "selectors": {"note": "У пакеті немає файла ліцензії; наведено стандартний текст MPL-2.0."}
+  }
+}

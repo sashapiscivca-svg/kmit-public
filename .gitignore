@@ -1,0 +1,19 @@
+/target
+/.superpowers
+/dev-data
+.claude/
+/app/reviewer-dist
+app/src-tauri/gen/android/.kotlin/
+/site/promo/promo.html
+
+# Signing material and build outputs must never be committed
+*.jks
+*.keystore
+*.p12
+*.pem
+key.properties
+keystore.properties
+.env
+.env.*
+*.apk
+*.aab

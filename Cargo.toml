@@ -1,0 +1,27 @@
+[workspace]
+resolver = "2"
+members = [
+    "crates/tutor-core",
+    "crates/course-pack",
+    "crates/generators-math",
+    "crates/subjects",
+    "crates/content-tools",
+    "crates/tutor-engine",
+    "crates/storage",
+    "crates/app-core",
+    "crates/report",
+    "crates/dev-server",
+]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2021"
+license = "PolyForm-Noncommercial-1.0.0"
+rust-version = "1.80"
+authors = ["Oleksandr Shynkarenko <sasha.piscivca@gmail.com>"]
+repository = "https://github.com/sashapiscivca-svg/kmit"
+# Код відкритий лише для некомерційного використання: не публікувати на crates.io.
+publish = false
+
+[workspace.lints.rust]
+unsafe_code = "forbid"

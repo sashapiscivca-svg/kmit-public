@@ -1,0 +1,19 @@
+[package]
+name = "tutor-engine"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+tutor-core = { path = "../tutor-core" }
+course-pack = { path = "../course-pack" }
+
+[dev-dependencies]
+generators-math = { path = "../generators-math" }

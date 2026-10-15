@@ -1,0 +1,23 @@
+[package]
+name = "tutor-core"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[features]
+# Лише для тестів: дозволяє позначити тему опанованою без проходження.
+test-support = []
+
+[dependencies]
+rand_chacha = "0.3.1"
+rand_core = "0.6.4"
+
+[dev-dependencies]
+proptest = "1"

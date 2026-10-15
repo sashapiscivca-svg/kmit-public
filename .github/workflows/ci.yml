@@ -1,0 +1,74 @@
+name: ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Форматування
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo fmt --all --check
+      - name: Clippy
+        run: cargo clippy --workspace --all-targets --locked -- -D warnings
+      - name: Тести
+        run: cargo test --workspace --locked
+      - name: Ядро не залежить від мережевих бібліотек
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          if cargo tree -p tutor-core -e normal | grep -E "reqwest|hyper|tokio|ureq|curl|rustls|openssl"; then
+            echo "tutor-core залежить від мережевої бібліотеки"; exit 1
+          fi
+      - name: Збірка методиста (feature reviewer)
+        if: matrix.os == 'ubuntu-latest'
+        run: cargo test -p app-core --features reviewer,test-support --test reviewer_tests --locked
+      - name: Інтерфейс (синтаксис і сумісність зі старими WebView)
+        if: matrix.os == 'ubuntu-latest'
+        run: scripts/check_ui.sh
+      - name: Перелік ліцензій актуальний (app/ui/licenses.txt)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cargo fetch --locked --manifest-path app/src-tauri/Cargo.toml
+          python3 scripts/licenses.py --check
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: cargo fetch --locked
+      - name: Наскрізні перевірки інтерфейсу (світла й темна тема, збірка методиста)
+        run: |
+          export CHROME="$(command -v google-chrome || command -v chromium || command -v chromium-browser)"
+          THEME=light scripts/e2e.sh
+          THEME=dark scripts/e2e.sh
+          scripts/e2e-reviewer.sh
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions-rust-lang/audit@v1
+        with:
+          denyWarnings: false
+
+  licensing:
+    # Кожен файл має правовласника й ліцензію (REUSE.toml, пояснення в LICENSE-CONTENT.md).
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ліцензії файлів (REUSE)
+        uses: fsfe/reuse-action@v5

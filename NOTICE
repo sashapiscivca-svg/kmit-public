@@ -1,0 +1,23 @@
+Kmit
+Copyright 2026 Oleksandr Shynkarenko (Олександр Шинкаренко) <sasha.piscivca@gmail.com>
+
+Required Notice: Copyright 2026 Oleksandr Shynkarenko (Олександр Шинкаренко) <sasha.piscivca@gmail.com>
+
+Licensing of this repository
+  Software ............ PolyForm Noncommercial License 1.0.0 (LICENSE)
+  Learning content
+  and documentation ... Creative Commons BY-NC-SA 4.0 (LICENSE-CONTENT.md)
+  Fonts ............... SIL Open Font License 1.1 (files next to each font)
+  Gradle wrapper ...... Apache License 2.0
+  Name and logo ....... not licensed (TRADEMARKS.md)
+Path-by-path mapping: REUSE.toml. Licence texts: LICENSES/.
+Commercial licensing and other permissions: sasha.piscivca@gmail.com
+
+Third-party components bundled in the app
+  Fonts: Manrope (c) 2018 The Manrope Project Authors; Caveat (c) 2014 The
+  Caveat Project Authors; Liberation Sans: digitized data (c) 2010 Google
+  Corporation, (c) 2012 Red Hat, Inc. with Reserved Font Name "Liberation".
+  All under SIL Open Font License 1.1.
+  Rust libraries, SQLCipher, SQLite, OpenSSL, AndroidX and Kotlin: see the
+  full list with licence texts in app/ui/licenses.txt, shown in the app as
+  "Ліцензії та подяки" (Licences and credits).

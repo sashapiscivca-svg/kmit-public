@@ -1,0 +1,23 @@
+[package]
+name = "content-tools"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+authors.workspace = true
+repository.workspace = true
+publish.workspace = true
+rust-version.workspace = true
+
+[lints]
+workspace = true
+
+[dependencies]
+subjects = { path = "../subjects" }
+serde_json = "1"
+ed25519-dalek = { version = "2", default-features = false, features = ["std"], optional = true }
+getrandom = { version = "0.2", optional = true }
+
+[features]
+default = ["sign"]
+# Підпис пакетів потрібен лише інструменту розробника, не застосунку.
+sign = ["dep:ed25519-dalek", "dep:getrandom"]

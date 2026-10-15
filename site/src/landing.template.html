@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<title>Kmit: вчитися можна без інтернету</title>
+<meta name="description" content="Kmit: безкоштовний офлайн-помічник для 5–7 класів за програмою НУШ. Уроки, підказки, повторення. Усе лишається в телефоні дитини.">
+<style>
+@font-face { font-family: Manrope; font-weight: 400; src: url({{font:Manrope-400}}) format('truetype'); font-display: swap; }
+@font-face { font-family: Manrope; font-weight: 600; src: url({{font:Manrope-600}}) format('truetype'); font-display: swap; }
+@font-face { font-family: Manrope; font-weight: 800; src: url({{font:Manrope-800}}) format('truetype'); font-display: swap; }
+@font-face { font-family: Caveat; font-weight: 700; src: url({{font:Caveat-700}}) format('truetype'); font-display: swap; }
+:root {
+  --paper: #f3f7fb; --grid: #d3e0ee; --sheet: #ffffff; --sheet2: #eaf1f9;
+  --ink: #1b2a6b; --soft: #4a5a96; --line: #b9c9dc;
+  --pen: #2b4bd6; --pen-ink: #ffffff; --red: #d93a2f; --marker: #ffd23f; --ok: #13875f;
+  --r1: 8px; --r2: 16px; --r3: 28px;
+  --font: Manrope, system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  --hand: Caveat, "Segoe Print", "Comic Sans MS", cursive;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #14211f; --grid: #223633; --sheet: #1b2b28; --sheet2: #22362f;
+    --ink: #f1eee3; --soft: #b8c4bd; --line: #3a524c;
+    --pen: #8fb8ff; --pen-ink: #0f1d33; --red: #ff8a7a; --marker: #ffd96b; --ok: #6fd6a6;
+    color-scheme: dark;
+  }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; color: var(--ink); font: 400 1.0625rem/1.65 var(--font);
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { animation: none !important; transition: none !important; } }
+a { color: var(--pen); }
+:focus-visible { outline: 3px solid var(--pen); outline-offset: 3px; border-radius: 6px; }
+.wrap { width: min(1120px, 100% - 40px); margin-inline: auto; }
+section { padding: clamp(48px, 8vw, 96px) 0; }
+h1, h2, h3 { margin: 0; line-height: 1.12; text-wrap: balance; }
+h1 { font: 700 clamp(3rem, 8.5vw, 5.8rem)/0.98 var(--hand); letter-spacing: 0.01em; }
+h2 { font: 700 clamp(2.2rem, 5vw, 3.4rem)/1.02 var(--hand); }
+h3 { font-weight: 800; font-size: 1.25rem; }
+.kicker { font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; font-size: 0.78rem; color: var(--soft); margin: 0 0 14px; }
+.lead { font-size: clamp(1.1rem, 2.2vw, 1.35rem); color: var(--soft); max-width: 36em; }
+.sheet { background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); padding: clamp(18px, 3vw, 28px); box-shadow: 0 4px 0 var(--ink); }
+.btn { display: inline-flex; align-items: center; justify-content: center; min-height: 52px; padding: 0 26px; border-radius: 14px; border: 2px solid var(--ink); background: var(--sheet); color: var(--ink); font: 800 1rem var(--font); text-decoration: none; box-shadow: 0 4px 0 var(--ink); transition: transform .12s, box-shadow .12s; cursor: pointer; }
+.btn:hover { transform: translateY(2px); box-shadow: 0 2px 0 var(--ink); }
+.btn.primary { background: var(--pen); color: var(--pen-ink); }
+.cta { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.chips { display: flex; flex-wrap: wrap; gap: 10px; margin: 28px 0 0; padding: 0; list-style: none; }
+.chips li { border: 2px solid var(--ink); border-radius: 999px; padding: 6px 16px; font-weight: 800; font-size: 0.9rem; background: var(--sheet); }
+
+/* Телефон із реальним знімком застосунку */
+.phone { width: min(300px, 78vw); aspect-ratio: 390 / 844; border: 8px solid var(--ink); border-radius: 40px; background: #f3f7fb; padding-top: 26px; overflow: hidden; position: relative; box-shadow: 0 18px 0 -6px rgba(27,42,107,.18), 0 30px 60px -20px rgba(27,42,107,.45); }
+.phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; border-top: 1px solid rgba(27,42,107,.15); }
+.phone::before { content: ""; position: absolute; top: 8px; left: 50%; width: 76px; height: 20px; margin-left: -38px; border-radius: 12px; background: var(--ink); z-index: 2; opacity: .92; }
+
+.hero { padding-top: clamp(28px, 6vw, 64px); }
+.hero .wrap { display: grid; grid-template-columns: 1.15fr 0.85fr; gap: clamp(24px, 6vw, 80px); align-items: center; }
+.hero .stage { display: grid; place-items: center; position: relative; }
+.hero .stage .float { position: absolute; width: 96px; height: 96px; filter: drop-shadow(0 6px 0 rgba(27,42,107,.25)); animation: bob 3.4s ease-in-out infinite; }
+.hero .stage .float svg { width: 100%; height: 100%; display: block; }
+.hero .stage .f1 { left: -2%; top: 3%; } .hero .stage .f2 { right: 0; bottom: 14%; animation-delay: -1.7s; width: 84px; height: 84px; }
+@keyframes bob { 0%, 100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
+.nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; }
+.logo { font: 700 2.2rem/1 var(--hand); text-decoration: none; color: var(--ink); }
+.nav a.btn { min-height: 44px; padding: 0 18px; }
+.nav .links { display: flex; gap: 22px; font-weight: 800; }
+@media (max-width: 860px) { .hero .wrap { grid-template-columns: 1fr; } .hero .stage { order: -1; } .nav .links { display: none; } }
+
+.steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; margin-top: 40px; }
+.steps .sheet { padding-bottom: 0; overflow: hidden; display: flex; flex-direction: column; }
+.steps .num { font: 700 3rem/1 var(--hand); color: var(--red); }
+.steps .sheet p { margin-bottom: 20px; }
+.steps .shot { margin: auto -28px 0; border-top: 2px solid var(--ink); }
+.steps .shot img { display: block; width: 100%; height: 250px; object-fit: cover; object-position: top; }
+@media (max-width: 860px) { .steps { grid-template-columns: 1fr; } }
+
+.worlds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 36px; }
+.world { border: 2px solid var(--ink); border-radius: var(--r2); padding: 14px; background: var(--sheet); box-shadow: 0 4px 0 var(--ink); }
+.world .wh { display: flex; flex-direction: column; margin-bottom: 8px; }
+.world .wh span { font-size: 0.82rem; font-weight: 800; color: var(--soft); text-transform: uppercase; letter-spacing: .06em; }
+.world .wr { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+.world svg { width: 100%; height: auto; display: block; }
+.w-forest { background-image: linear-gradient(rgba(58,166,106,.16), rgba(58,166,106,.16)); } .w-sea { background-image: linear-gradient(rgba(42,156,200,.18), rgba(42,156,200,.18)); }
+.w-sky { background-image: linear-gradient(rgba(154,134,232,.2), rgba(154,134,232,.2)); } .w-cave { background-image: linear-gradient(rgba(125,107,176,.2), rgba(125,107,176,.2)); }
+.w-desert { background-image: linear-gradient(rgba(224,160,64,.2), rgba(224,160,64,.2)); } .w-space { background-image: linear-gradient(rgba(74,94,200,.18), rgba(74,94,200,.18)); }
+.w-ice { background-image: linear-gradient(rgba(110,198,232,.22), rgba(110,198,232,.22)); } .w-summit { background-image: linear-gradient(rgba(224,98,58,.18), rgba(224,98,58,.18)); }
+@media (max-width: 900px) { .worlds { grid-template-columns: repeat(2, 1fr); } }
+.trio { display: flex; justify-content: center; gap: clamp(12px, 3vw, 36px); margin-top: 56px; flex-wrap: wrap; }
+.trio .phone { width: min(230px, 42vw); border-width: 6px; border-radius: 32px; }
+.trio .phone:nth-child(2) { transform: translateY(-22px); }
+
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(24px, 6vw, 72px); align-items: center; }
+@media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+.ticks { list-style: none; padding: 0; margin: 22px 0 0; display: grid; gap: 14px; }
+.ticks li { display: grid; grid-template-columns: 30px 1fr; gap: 12px; align-items: start; }
+.ticks li::before { content: "✓"; display: grid; place-items: center; width: 28px; height: 28px; border-radius: 50%; background: var(--ok); color: #fff; font-weight: 800; margin-top: 2px; }
+.ticks b { display: block; }
+.duo { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.duo .phone { width: min(240px, 44vw); border-width: 6px; border-radius: 32px; }
+
+.band { background: var(--ink); color: var(--paper); border-block: 2px solid var(--ink); }
+.band .kicker { color: var(--marker); } .band .lead { color: #c9d3f5; }
+.band a { color: var(--marker); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .band { background: #0d1816; color: #f1eee3; } }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-top: 36px; }
+.fact { border: 2px solid rgba(255,255,255,.35); border-radius: var(--r2); padding: 20px; }
+.fact b { display: block; font: 700 3rem/1 var(--hand); color: var(--marker); }
+.fact span { font-size: .95rem; color: #dbe3fb; }
+@media (max-width: 860px) { .facts { grid-template-columns: repeat(2, 1fr); } }
+table.cov { width: 100%; border-collapse: collapse; margin-top: 28px; background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r2); overflow: hidden; color: var(--ink); }
+table.cov th, table.cov td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); vertical-align: top; }
+table.cov th { background: var(--sheet2); font-weight: 800; }
+table.cov tr:last-child td { border-bottom: none; }
+.note { border-left: 6px solid var(--marker); background: var(--sheet); padding: 14px 18px; border-radius: 0 var(--r1) var(--r1) 0; margin-top: 28px; color: var(--ink); }
+.band .note { background: rgba(255,255,255,.1); color: #f1eee3; }
+
+.pilot { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 36px; counter-reset: s; }
+.pilot .sheet { counter-increment: s; position: relative; padding-top: 52px; }
+.pilot .sheet::before { content: counter(s); position: absolute; top: 8px; left: 18px; font: 700 2.6rem/1 var(--hand); color: var(--red); }
+@media (max-width: 960px) { .pilot { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 560px) { .pilot { grid-template-columns: 1fr; } }
+details { background: var(--sheet); border: 2px solid var(--ink); border-radius: var(--r1); padding: 14px 18px; margin-top: 12px; }
+summary { cursor: pointer; font-weight: 800; }
+details p { margin: 10px 0 0; color: var(--soft); }
+footer { padding: 40px 0 60px; border-top: 2px solid var(--ink); background: var(--sheet2); }
+footer .wrap { display: grid; gap: 14px; }
+footer small { color: var(--soft); }
+#contact[hidden] { display: none; }
+</style>
+</head>
+<body>
+<header class="wrap nav">
+  <a class="logo" href="#top" aria-label="Kmit, на початок">Kmit</a>
+  <nav class="links" aria-label="Розділи">
+    <a href="#how">Як це працює</a><a href="#worlds">Світи</a><a href="#privacy">Приватність</a><a href="#teachers">Вчителям</a><a href="#quality">Якість</a>
+  </nav>
+  <a class="btn primary" href="#pilot">Пілот</a>
+</header>
+
+<main id="top">
+<section class="hero" aria-labelledby="h1">
+  <div class="wrap">
+    <div>
+      <p class="kicker">Для 5–7 класів · за програмою НУШ</p>
+      <h1 id="h1">Вчитися можна без інтернету.</h1>
+      <p class="lead" style="margin-top:22px">Kmit: безкоштовний помічник, який пояснює тему, підказує, не видаючи відповіді, і вчасно нагадує повторити. Усе, що робить дитина, лишається в її телефоні.</p>
+      <div class="cta"><a class="btn primary" href="#pilot">Долучитися до пілоту</a><a class="btn" href="#how">Як це працює</a></div>
+      <ul class="chips" aria-label="Коротко">
+        <li>Без інтернету</li><li>Без реклами</li><li>Без облікових записів</li><li>Код у відкритому доступі</li>
+      </ul>
+    </div>
+    <div class="stage">
+      <div class="phone"><img src="{{img:home}}" alt="Головний екран Kmit: зошити предметів у клітинку, план на сьогодні" width="560" height="1212"></div>
+      <div class="float f1">{{creature:forest:0}}</div>
+      <div class="float f2">{{creature:sea:2}}</div>
+    </div>
+  </div>
+</section>
+
+<section id="how" aria-labelledby="how-h">
+  <div class="wrap">
+    <p class="kicker">Як це працює</p>
+    <h2 id="how-h">Пояснює. Підказує. Нагадує.</h2>
+    <p class="lead" style="margin-top:14px">Три дії, на яких тримається навчання, і жодної гонки: ні таймерів, ні балів «проти інших».</p>
+    <div class="steps">
+      <article class="sheet"><div class="num">1</div><h3>Пояснює</h3>
+        <p>Короткі уроки з прикладами крок за кроком: що роблю і чому. Схеми, поняття, питання одразу після прикладу.</p>
+        <div class="shot"><img src="{{img:lesson-example}}" alt="Урок: розібраний приклад додавання десяткових дробів" loading="lazy" width="560" height="1212"></div></article>
+      <article class="sheet"><div class="num">2</div><h3>Підказує, а не віддає</h3>
+        <p>Три підказки: навідне запитання, правило, хід думки. Відповідь називає дитина сама, а помилка розбирається «чому так».</p>
+        <div class="shot"><img src="{{img:topic}}" alt="Сторінка теми: пройти урок, потренуватися, перевірити себе" loading="lazy" width="560" height="1212"></div></article>
+      <article class="sheet"><div class="num">3</div><h3>Нагадує повторити</h3>
+        <p>Теми повертаються через інтервали, щоб знання не забувалися. Нічого не «згорає»: колекція завжди лишається з дитиною.</p>
+        <div class="shot"><img src="{{img:album}}" alt="Колекція істот: нагороди за теми й за наполегливість" loading="lazy" width="560" height="1212"></div></article>
+    </div>
+  </div>
+</section>
+
+<section id="worlds" aria-labelledby="w-h" style="background:linear-gradient(var(--sheet2),var(--sheet2));border-block:2px solid var(--ink)">
+  <div class="wrap">
+    <p class="kicker">Колекції</p>
+    <h2 id="w-h">Кожен клас має свій світ.</h2>
+    <p class="lead" style="margin-top:14px">Істот у кожному світі «малює» сама тема, яку дитина опанувала, тому вони завжди різні. Нагороди даються за розуміння й наполегливість, а не за час у застосунку.</p>
+    <div class="worlds">{{worlds}}</div>
+    <div class="trio" aria-label="Свято переходу до наступного класу">
+      <div class="phone"><img src="{{img:ceremony-summary}}" alt="Свято переходу: 5 клас пройдено, підсумок без порівнянь" loading="lazy" width="560" height="1212"></div>
+      <div class="phone"><img src="{{img:ceremony-world}}" alt="Новий світ «Море й берег» і стартова істота-подарунок" loading="lazy" width="560" height="1212"></div>
+      <div class="phone"><img src="{{img:ceremony-done}}" alt="Вітання в 6 класі та свідоцтво про перехід" loading="lazy" width="560" height="1212"></div>
+    </div>
+    <p class="lead" style="margin:36px auto 0;text-align:center"><b>Перехід до нового класу це свято.</b> Парад істот, новий світ зі стартовим другом, свідоцтво на згадку. Свято нічого не блокує й не оцінює: його можна пропустити чи повернутися назад.</p>
+  </div>
+</section>
+
+<section id="privacy" aria-labelledby="p-h">
+  <div class="wrap two">
+    <div>
+      <p class="kicker">Приватність</p>
+      <h2 id="p-h">Дані дитини не залишають телефона.</h2>
+      <p class="lead" style="margin-top:14px">Kmit створено для дітей, тому він не просить того, що йому не потрібно.</p>
+      <ul class="ticks">
+        <li><span><b>Немає доступу до інтернету</b>У застосунку немає дозволу на мережу. Це перевіряють автоматичні тести.</span></li>
+        <li><span><b>Профіль зашифрований</b>Захист PIN і код відновлення. Ім'я може бути вигаданим, прізвище, фото й дата народження не потрібні.</span></li>
+        <li><span><b>Жодної реклами й аналітики</b>Немає облікових записів, покупок, чатів і стеження.</span></li>
+        <li><span><b>Вчитель бачить лише аркуш</b>Дані дитини не передаються вчителю цифровим шляхом: дитина сама показує роздрукований аркуш.</span></li>
+        <li><span><b>Усе можна видалити</b>Профіль і всі його дані видаляються в налаштуваннях, незворотно.</span></li>
+      </ul>
+    </div>
+    <div class="duo">
+      <div class="phone"><img src="{{img:role}}" alt="Вибір ролі: профілі учня й вчителя окремі" loading="lazy" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:46px"><img src="{{img:welcome}}" alt="Вітання у Kmit" loading="lazy" width="560" height="1212"></div>
+    </div>
+  </div>
+</section>
+
+<section id="teachers" aria-labelledby="t-h" style="background:linear-gradient(var(--sheet2),var(--sheet2));border-block:2px solid var(--ink)">
+  <div class="wrap two">
+    <div class="duo">
+      <div class="phone"><img src="{{img:cabinet}}" alt="Кабінет вчителя: вітання, роботи, нотатки до уроку" loading="lazy" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:46px"><img src="{{img:work-ready}}" alt="Готова робота: завдання, ключ, бланк відповідей і картки для друку" loading="lazy" width="560" height="1212"></div>
+    </div>
+    <div>
+      <p class="kicker">Вчителям</p>
+      <h2 id="t-h">Менше рутини, більше часу з дітьми.</h2>
+      <p class="lead" style="margin-top:14px">Окремий кабінет у тому самому застосунку. Жодних даних учнів, лише ваша робота.</p>
+      <ul class="ticks">
+        <li><span><b>Роботи за хвилину</b>Самостійна, контрольна, домашня, словниковий диктант, пропуски. 1–4 варіанти з ключем, бланком відповідей і картками для розрізання (PDF).</span></li>
+        <li><span><b>План уроку на 45 хвилин</b>З готових блоків теми, з відповідями й ключовими ідеями для звірки.</span></li>
+        <li><span><b>Бібліотека тем</b>Пошук по всіх уроках, закладки, тематичний план для друку.</span></li>
+        <li><span><b>Невеликі свята</b>Кабінет вітає з першою роботою, з Днем працівників освіти й Днем знань. Просто приємно.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="quality" class="band" aria-labelledby="q-h">
+  <div class="wrap">
+    <p class="kicker">Якість і чесність</p>
+    <h2 id="q-h">Матеріали ще перевіряються. Ми кажемо про це прямо.</h2>
+    <p class="lead" style="margin-top:14px">Тексти й завдання створено за програмами НУШ за допомогою ШІ-агентів. Їх перевірено автоматично: окремий агент відповідає на завдання, не бачачи ключа, а знайдені розбіжності виправлено. Такі перевірки зменшують кількість помилок, але не замінюють фахівців: <b>методисти ще не вичитували матеріалів, тож у них можуть бути помилки, і весь вміст має статус «чернетка».</b> Вичитка відбуватиметься в окремому застосунку для методистів. Пілот допоможе знайти те, що ми пропустили.</p>
+    <div class="facts">
+      <div class="fact"><b>446</b><span>тем із уроками для 5–7 класів</span></div>
+      <div class="fact"><b>11 330</b><span>готових завдань, плюс генератор математики 5 класу</span></div>
+      <div class="fact"><b>23</b><span>курси «предмет × клас»: 7 у 5 класі, 7 у 6-му, 9 у 7-му</span></div>
+      <div class="fact"><b>8</b><span>світів істот: для кожного класу 5–12 свій</span></div>
+    </div>
+    <table class="cov" aria-label="Що вже є за класами">
+      <thead><tr><th>Клас</th><th>Предмети</th><th>Теми</th></tr></thead>
+      <tbody>
+        <tr><td>5</td><td>Математика, українська мова й література, англійська, історія, природознавство, інформатика</td><td>134</td></tr>
+        <tr><td>6</td><td>Українська мова й література, англійська, історія, біологія, географія, інформатика</td><td>136</td></tr>
+        <tr><td>7</td><td>Українська мова й література, англійська, історія, біологія, географія, фізика, хімія, інформатика</td><td>176</td></tr>
+      </tbody>
+    </table>
+    <p class="note">Застосунок поки перевірено лише автоматичними тестами й у браузері; на телефонах його ще не випробовували. Чого ще немає: математики для 6–7 класів, 8–12 класів, довершених карт і озвучення. Kmit не замінює вчителя й не обіцяє результатів НМТ: це помічник для навчання, повторення й тренування.</p>
+  </div>
+</section>
+
+<section id="pilot" aria-labelledby="pi-h">
+  <div class="wrap">
+    <p class="kicker">Пілот</p>
+    <h2 id="pi-h">Невеликий і дбайливий пілот.</h2>
+    <p class="lead" style="margin-top:14px">Шукаємо 5–8 дітей 5 класу (різного рівня), 1–2 вчителів математики чи української мови й методиста. Участь добровільна, діти можуть зупинитися в будь-який момент.</p>
+    <div class="pilot">
+      <div class="sheet"><h3>Згода</h3><p>Для дітей до 14 років письмова згода батьків: у ній пояснено, що застосунок нічого не передає в мережу.</p></div>
+      <div class="sheet"><h3>Кілька коротких сесій</h3><p>По 25–30 хвилин: перше знайомство, математика, мова чи історія, конспект і нагороди. Спостерігач лише дивиться й не підказує.</p></div>
+      <div class="sheet"><h3>Нічого не збирається автоматично</h3><p>Спостереження записуються на папері без імен. Звіт про помилку в завданні дитина зберігає файлом і пересилає сама, якщо захоче.</p></div>
+      <div class="sheet"><h3>Ми виправляємо</h3><p>Усе, що знайдено в матеріалах і в застосунку, виправляємо до ширшого запуску. Критерій: жодної помилки, що вводить в оману.</p></div>
+    </div>
+    <div class="cta" style="margin-top:36px"><a class="btn primary" id="join" href="#contact-box">Написати нам про участь</a></div>
+    <p id="contact-box" class="note" style="margin-top:24px">Хочете взяти участь або вичитати матеріали як методист? <span id="contact" hidden>Напишіть: <a id="contact-link" href="#"></a>.</span><span id="contact-none"> Контакт для зв'язку буде в запрошенні, яке ви отримали.</span></p>
+  </div>
+</section>
+
+<section aria-labelledby="f-h" style="background:linear-gradient(var(--sheet2),var(--sheet2));border-block:2px solid var(--ink)">
+  <div class="wrap">
+    <p class="kicker">Відкритість</p>
+    <h2 id="f-h">Код відкритий для читання. Для некомерційного використання.</h2>
+    <p class="lead" style="margin-top:14px">Код Kmit відкритий для читання, перевірки й змін для некомерційних цілей (PolyForm Noncommercial 1.0.0), уроки й завдання під CC BY-NC-SA 4.0. Це означає: школи, родини й волонтери користуються безкоштовно й вільно; продавати Kmit без окремого дозволу не можна. Строго кажучи, це не «open source» за визначенням OSI, бо обмежує комерційне використання, і ми про це кажемо прямо.</p>
+    <details><summary>Чи платний Kmit?</summary><p>Ні. У застосунку немає покупок, реклами й підписок.</p></details>
+    <details><summary>Чи потрібен інтернет?</summary><p>Ні. Установка потребує файлу застосунку, далі все працює без мережі.</p></details>
+    <details><summary>Чи замінює Kmit вчителя?</summary><p>Ні. Це помічник для самостійного навчання й повторення та інструмент, що економить час учителя. Рішення про навчання ухвалюють дорослі.</p></details>
+    <details><summary>Чи готує Kmit до НМТ?</summary><p>Ми не обіцяємо результатів. Частина завдань побудована у форматі, схожому на тести НМТ, для тренування. Зараз є 5–7 класи, старші класи у роботі.</p></details>
+    <details><summary>Хто стоїть за Kmit?</summary><p>Незалежний проєкт Олександра Шинкаренка, не державний застосунок і не продукт МОН. Для вичитки матеріалів шукаємо методистів-добровольців; вичитка ще не почалася.</p></details>
+  </div>
+</section>
+</main>
+<footer>
+  <div class="wrap">
+    <a class="logo" href="#top">Kmit</a>
+    <small>© 2026 Олександр Шинкаренко · Код: <a href="https://github.com/sashapiscivca-svg/kmit/blob/main/LICENSE">PolyForm Noncommercial 1.0.0</a> · Вміст: <a href="https://github.com/sashapiscivca-svg/kmit/blob/main/LICENSE-CONTENT.md">CC BY-NC-SA 4.0</a> · Шрифти: Manrope, Caveat — <a href="https://github.com/sashapiscivca-svg/kmit/tree/main/LICENSES">SIL OFL 1.1</a></small>
+    <small>Помічник для навчання. Усе лишається на цьому пристрої. Назва й логотип Kmit не ліцензуються разом із кодом і вмістом (<a href="https://github.com/sashapiscivca-svg/kmit/blob/main/TRADEMARKS.md">TRADEMARKS.md</a>). Вихідний код: <a href="https://github.com/sashapiscivca-svg/kmit">github.com/sashapiscivca-svg/kmit</a>.</small>
+    <small>Kmit не є державним застосунком і не пов'язаний із МОН України. Скріншоти зроблено з реального застосунку на тестових даних.</small>
+  </div>
+</footer>
+<script>
+// Контакт для пілоту. Якщо рядок порожній, показується нейтральний текст.
+var CONTACT_EMAIL = 'sasha.piscivca@gmail.com';
+if (CONTACT_EMAIL) {
+  var a = document.getElementById('contact-link');
+  a.href = 'mailto:' + CONTACT_EMAIL; a.textContent = CONTACT_EMAIL;
+  document.getElementById('contact').hidden = false;
+  document.getElementById('contact-none').hidden = true;
+  document.getElementById('join').href = 'mailto:' + CONTACT_EMAIL + '?subject=Kmit%3A%20%D0%BF%D1%96%D0%BB%D0%BE%D1%82';
+}
+</script>
+</body>
+</html>

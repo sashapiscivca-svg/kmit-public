@@ -1,0 +1,3 @@
+Files under this identifier are copies of licence and notice texts of
+third-party software, reproduced as those licences require. Each file is
+governed by the terms it contains; it is not licensed by the Kmit authors.

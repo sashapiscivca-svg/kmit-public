@@ -1,0 +1,7 @@
+* text=auto eol=lf
+*.png binary
+*.ttf binary
+*.jks binary
+app/src-tauri/gen/** linguist-generated
+LICENSES/** linguist-documentation
+crates/subjects/packs/*.json linguist-generated=false
