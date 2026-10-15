@@ -1,6 +1,8 @@
 mod common;
 
-use common::{contains, TestDir};
+#[cfg(unix)]
+use common::contains;
+use common::TestDir;
 use std::cell::Cell;
 use storage::crypto::KdfParams;
 use storage::state::AppState;
