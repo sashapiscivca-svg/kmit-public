@@ -16,14 +16,18 @@ const profile = mkdtempSync(join(tmpdir(), 'kmit-e2e-'));
 const chrome = spawn(CHROME, [
   '--headless=new', '--no-sandbox', '--disable-gpu', '--disable-extensions', '--no-first-run',
   `--user-data-dir=${profile}`, `--remote-debugging-port=${PORT}`, '--window-size=420,900', 'about:blank',
-], { stdio: 'ignore' });
+], { stdio: ['ignore', 'ignore', 'pipe'] });
+// Вивід Chromium зберігаємо, щоб показати його, якщо браузер не запуститься.
+let chromeErr = '';
+chrome.stderr.on('data', (d) => { chromeErr = (chromeErr + d).slice(-4000); });
 const cleanup = () => { try { chrome.kill('SIGKILL'); } catch {} try { rmSync(profile, { recursive: true, force: true }); } catch {} };
 process.on('exit', cleanup);
 
 process.on('uncaughtException', async (e) => { try { console.error('ЕКРАН ПРИ ПОМИЛЦІ:\n' + (await text())); } catch {} console.error(e.message); cleanup(); process.exit(1); });
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 async function wsUrl() {
-  for (let i = 0; i < 100; i++) {
+  // До 30 с: на повільних CI-серверах перший запуск Chromium буває довгим.
+  for (let i = 0; i < 300; i++) {
     try {
       const r = await fetch(`http://127.0.0.1:${PORT}/json`);
       const t = (await r.json()).find((x) => x.type === 'page');
@@ -31,7 +35,7 @@ async function wsUrl() {
     } catch {}
     await sleep(100);
   }
-  throw new Error('Chromium не запустився');
+  throw new Error('Chromium не запустився' + (chrome.exitCode !== null ? ` (код виходу ${chrome.exitCode})` : '') + '\n' + chromeErr);
 }
 const ws = new WebSocket(await wsUrl());
 await new Promise((r) => ws.addEventListener('open', r));
