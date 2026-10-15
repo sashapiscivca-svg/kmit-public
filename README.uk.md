@@ -141,6 +141,7 @@ Kmit це **source-available, а не open source** за визначенням 
 
 - **Код:** [PolyForm Noncommercial License 1.0.0](LICENSE).
 - **Вміст** (уроки, завдання, підказки, пояснення, пакети вмісту): [CC BY-NC-SA 4.0](LICENSE-CONTENT.md).
+- **Відкритий датасет «Kmit Math 5»** (6 301 задача з математики 5 класу з перевіреними ключами, підказками й типовими помилками, експортовані з генераторів): [CC BY 4.0](LICENSES/CC-BY-4.0.txt), на Hugging Face Hub: [alexshynkarenk0/kmit-math-5](https://huggingface.co/datasets/alexshynkarenk0/kmit-math-5).
 - **Шрифти:** SIL Open Font License 1.1 ([LICENSES/](LICENSES/)).
 - **Сторонні компоненти:** див. [NOTICE](NOTICE) і екран застосунку «Ліцензії та подяки».
 - **Назва й логотип:** «Kmit» і логотип не ліцензуються жодною з наведених ліцензій; див. [TRADEMARKS.md](TRADEMARKS.md).

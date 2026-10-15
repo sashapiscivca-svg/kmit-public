@@ -141,6 +141,7 @@ Kmit is **source-available, not open source** in the OSI sense: commercial use i
 
 - **Code:** [PolyForm Noncommercial License 1.0.0](LICENSE).
 - **Content** (lessons, tasks, hints, explanations, content packs): [CC BY-NC-SA 4.0](LICENSE-CONTENT.md).
+- **Open dataset "Kmit Math 5"** (6,301 grade-5 maths tasks with verified answer keys, hints and typical errors, exported from the generators): [CC BY 4.0](LICENSES/CC-BY-4.0.txt), on the Hugging Face Hub as [alexshynkarenk0/kmit-math-5](https://huggingface.co/datasets/alexshynkarenk0/kmit-math-5).
 - **Fonts:** SIL Open Font License 1.1 ([LICENSES/](LICENSES/)).
 - **Third-party components:** see [NOTICE](NOTICE) and the in-app screen "Ліцензії та подяки" (Licences and acknowledgements).
 - **Name and logo:** "Kmit" and its logo are not licensed under any of the above; see [TRADEMARKS.md](TRADEMARKS.md).

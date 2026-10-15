@@ -92,3 +92,10 @@ path = "DCO"
 precedence = "override"
 SPDX-FileCopyrightText = "2004, 2006 The Linux Foundation and its contributors"
 SPDX-License-Identifier = "LicenseRef-DCO"
+
+# The open dataset "Kmit Math 5" (card here; data exported by scripts/export_math_dataset.py): CC BY 4.0.
+[[annotations]]
+path = ["docs/datasets/kmit-math-5/**", "LICENSES/CC-BY-4.0.txt"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Oleksandr Shynkarenko <sasha.piscivca@gmail.com>"
+SPDX-License-Identifier = "CC-BY-4.0"

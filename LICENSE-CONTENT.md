@@ -20,6 +20,7 @@ Everything else in this repository, including the user-interface text in `app/ui
 
 | Material | Terms |
 |---|---|
+| The open dataset "Kmit Math 5": the grade-5 maths tasks exported by `scripts/export_math_dataset.py` and its card in `docs/datasets/kmit-math-5/` (published at https://huggingface.co/datasets/alexshynkarenk0/kmit-math-5) | **Creative Commons Attribution 4.0 International** (CC BY 4.0), [`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt): any use, including commercial, with attribution |
 | Fonts Manrope, Caveat (`app/ui/fonts/`, `crates/report/assets/`) and Liberation Sans (`crates/report/assets/`), including copies embedded in `site/` | SIL Open Font License 1.1, with the copyright notices next to each font file |
 | Gradle wrapper (`app/src-tauri/gen/android/gradlew*`, `gradle/wrapper/`) | Apache License 2.0, © 2015 the original authors (Gradle) |
 | Third-party libraries compiled into the app | Their own licences; see [`NOTICE`](NOTICE) and the in-app screen "Ліцензії та подяки" |
@@ -72,6 +73,7 @@ The content is provided "as is", without warranty of any kind, as stated in Sect
 
 | Матеріал | Умови |
 |---|---|
+| Відкритий датасет «Kmit Math 5»: задачі з математики 5 класу, експортовані скриптом `scripts/export_math_dataset.py`, і його картка в `docs/datasets/kmit-math-5/` (опубліковано на https://huggingface.co/datasets/alexshynkarenk0/kmit-math-5) | **Creative Commons «Зазначення авторства» 4.0 Міжнародна** (CC BY 4.0), [`LICENSES/CC-BY-4.0.txt`](LICENSES/CC-BY-4.0.txt): будь-яке використання, зокрема комерційне, із зазначенням авторства |
 | Шрифти Manrope, Caveat (`app/ui/fonts/`, `crates/report/assets/`) та Liberation Sans (`crates/report/assets/`), зокрема їхні копії, вбудовані в `site/` | SIL Open Font License 1.1; повідомлення про авторські права лежать поруч із файлами шрифтів |
 | Обгортка Gradle (`app/src-tauri/gen/android/gradlew*`, `gradle/wrapper/`) | Apache License 2.0, © 2015 the original authors (Gradle) |
 | Сторонні бібліотеки, вкомпільовані в застосунок | Власні ліцензії; див. [`NOTICE`](NOTICE) та екран «Ліцензії та подяки» в застосунку |

@@ -4,6 +4,10 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
+### Added
+
+- **Open dataset "Kmit Math 5"** under CC BY 4.0: `crates/generators-math/examples/export_tasks.rs` and `scripts/export_math_dataset.py` export 6,301 grade-5 maths tasks (35 skills) with answer keys checked against the oracles and the answer parser, graded hints, typical errors with explanations and structured figure data; card in `docs/datasets/kmit-math-5/`; published at https://huggingface.co/datasets/alexshynkarenk0/kmit-math-5.
+
 ## [0.1.0] — 2026-10-15, first public source release
 
 This is the first public release of the source code. It is **pre-alpha**: the Android app has been tested manually by the author on a phone but not yet systematically across devices, and all learning content is AI-drafted and not yet reviewed by human methodologists.
