@@ -17,6 +17,10 @@ updates:
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
       - dependency-name: blake2
         update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: argon2
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: chacha20poly1305
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }
