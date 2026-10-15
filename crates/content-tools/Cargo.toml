@@ -15,7 +15,7 @@ workspace = true
 subjects = { path = "../subjects" }
 serde_json = "1"
 ed25519-dalek = { version = "2", default-features = false, features = ["std"], optional = true }
-getrandom = { version = "0.2", optional = true }
+getrandom = { version = "0.4", optional = true }
 
 [features]
 default = ["sign"]

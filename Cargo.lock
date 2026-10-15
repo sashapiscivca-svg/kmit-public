@@ -21,7 +21,7 @@ dependencies = [
  "course-pack",
  "ed25519-dalek",
  "generators-math",
- "getrandom 0.2.17",
+ "getrandom 0.4.3",
  "report",
  "serde_json",
  "storage",
@@ -161,7 +161,7 @@ name = "content-tools"
 version = "0.1.0"
 dependencies = [
  "ed25519-dalek",
- "getrandom 0.2.17",
+ "getrandom 0.4.3",
  "serde_json",
  "subjects",
 ]
@@ -848,7 +848,7 @@ dependencies = [
  "argon2",
  "blake2",
  "chacha20poly1305",
- "getrandom 0.2.17",
+ "getrandom 0.4.3",
  "rusqlite",
  "storage",
  "tutor-core",
