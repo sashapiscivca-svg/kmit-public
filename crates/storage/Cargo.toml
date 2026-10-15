@@ -16,7 +16,7 @@ workspace = true
 test-params = []
 
 [dependencies]
-blake2 = "0.10"
+blake2 = "0.11"
 tutor-core = { path = "../tutor-core" }
 rusqlite = { version = "0.40", features = ["bundled-sqlcipher-vendored-openssl"] }
 argon2 = "0.5"
