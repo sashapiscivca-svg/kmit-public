@@ -1,8 +1,8 @@
 blank_issues_enabled: false
 contact_links:
   - name: Безпека чи приватність / Security or privacy issue
-    url: https://github.com/sashapiscivca-svg/kmit/security/policy
+    url: https://github.com/sashapiscivca-svg/kmit-public/security/policy
     about: Не відкривайте публічного issue. Див. SECURITY.md (приватне повідомлення на GitHub або sasha.piscivca@gmail.com). / Do not open a public issue; see SECURITY.md.
   - name: Запитання, пілот, комерційна ліцензія / Questions, pilot, commercial licensing
-    url: https://github.com/sashapiscivca-svg/kmit#contact
+    url: https://github.com/sashapiscivca-svg/kmit-public#contact
     about: Пишіть на sasha.piscivca@gmail.com. / Write to sasha.piscivca@gmail.com.

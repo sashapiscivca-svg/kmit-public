@@ -36,7 +36,7 @@ This summary does not replace the licence.
   - share your adaptations under the same licence.
 - **You may not** use it for commercial purposes without separate written permission. Commercial purposes include selling it, paid courses, or using it in a paid or advertising-funded product.
 
-Suggested attribution: *"Kmit" by Oleksandr Shynkarenko, <https://github.com/sashapiscivca-svg/kmit>, licensed under CC BY-NC-SA 4.0.* If you changed the material, add "adapted".
+Suggested attribution: *"Kmit" by Oleksandr Shynkarenko, <https://github.com/sashapiscivca-svg/kmit-public>, licensed under CC BY-NC-SA 4.0.* If you changed the material, add "adapted".
 
 **Commercial use and other permissions:** write to <sasha.piscivca@gmail.com>.
 
@@ -88,7 +88,7 @@ The content is provided "as is", without warranty of any kind, as stated in Sect
   - поширюєте перероблене на тих самих умовах.
 - **Не можна** використовувати в комерційних цілях без окремого письмового дозволу. Комерційні цілі — це, зокрема, продаж, платні курси, використання в платному чи рекламному продукті.
 
-Рекомендоване зазначення авторства: *«Kmit», Олександр Шинкаренко, <https://github.com/sashapiscivca-svg/kmit>, ліцензія CC BY-NC-SA 4.0.* Якщо ви змінювали матеріал, додайте «перероблено».
+Рекомендоване зазначення авторства: *«Kmit», Олександр Шинкаренко, <https://github.com/sashapiscivca-svg/kmit-public>, ліцензія CC BY-NC-SA 4.0.* Якщо ви змінювали матеріал, додайте «перероблено».
 
 **Комерційне використання та інші дозволи:** пишіть на <sasha.piscivca@gmail.com>.
 

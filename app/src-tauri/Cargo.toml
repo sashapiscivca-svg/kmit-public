@@ -5,7 +5,7 @@ edition = "2021"
 license = "PolyForm-Noncommercial-1.0.0"
 rust-version = "1.80"
 authors = ["Oleksandr Shynkarenko <sasha.piscivca@gmail.com>"]
-repository = "https://github.com/sashapiscivca-svg/kmit"
+repository = "https://github.com/sashapiscivca-svg/kmit-public"
 publish = false
 
 # Окремий робочий простір: мобільна збірка (Tauri) має власний Cargo.lock і не змішується з крейтами ядра.

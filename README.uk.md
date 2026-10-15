@@ -1,6 +1,6 @@
 # Kmit
 
-[![CI](https://github.com/sashapiscivca-svg/kmit/actions/workflows/ci.yml/badge.svg)](https://github.com/sashapiscivca-svg/kmit/actions/workflows/ci.yml) [![Ліцензія коду: PolyForm NC 1.0.0](https://img.shields.io/badge/code-PolyForm%20NC%201.0.0-blue)](LICENSE) [![Ліцензія вмісту: CC BY-NC-SA 4.0](https://img.shields.io/badge/content-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE-CONTENT.md)
+[![CI](https://github.com/sashapiscivca-svg/kmit-public/actions/workflows/ci.yml/badge.svg)](https://github.com/sashapiscivca-svg/kmit-public/actions/workflows/ci.yml) [![Ліцензія коду: PolyForm NC 1.0.0](https://img.shields.io/badge/code-PolyForm%20NC%201.0.0-blue)](LICENSE) [![Ліцензія вмісту: CC BY-NC-SA 4.0](https://img.shields.io/badge/content-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE-CONTENT.md)
 
 [English](README.md) · **Українська**
 
@@ -54,7 +54,7 @@ Kmit це офлайн-помічник для навчання українсь
 Потрібні: стабільний Rust (мінімальна версія 1.80; CI використовує актуальний stable), компілятор C, `perl` і `make` (SQLCipher і OpenSSL компілюються з вихідного коду), Node.js ≥ 22 для перевірки інтерфейсу, Chromium чи Chrome для наскрізних тестів.
 
 ```bash
-git clone https://github.com/sashapiscivca-svg/kmit.git
+git clone https://github.com/sashapiscivca-svg/kmit-public.git
 cd kmit
 
 # Запуск застосунку в браузері на комп'ютері (те саме ядро на Rust, що й на Android)

@@ -1,6 +1,6 @@
 # Kmit
 
-[![CI](https://github.com/sashapiscivca-svg/kmit/actions/workflows/ci.yml/badge.svg)](https://github.com/sashapiscivca-svg/kmit/actions/workflows/ci.yml) [![Code licence: PolyForm NC 1.0.0](https://img.shields.io/badge/code-PolyForm%20NC%201.0.0-blue)](LICENSE) [![Content licence: CC BY-NC-SA 4.0](https://img.shields.io/badge/content-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE-CONTENT.md)
+[![CI](https://github.com/sashapiscivca-svg/kmit-public/actions/workflows/ci.yml/badge.svg)](https://github.com/sashapiscivca-svg/kmit-public/actions/workflows/ci.yml) [![Code licence: PolyForm NC 1.0.0](https://img.shields.io/badge/code-PolyForm%20NC%201.0.0-blue)](LICENSE) [![Content licence: CC BY-NC-SA 4.0](https://img.shields.io/badge/content-CC%20BY--NC--SA%204.0-lightgrey)](LICENSE-CONTENT.md)
 
 **English** · [Українська](README.uk.md)
 
@@ -54,7 +54,7 @@ Privacy policy (draft): [English](docs/legal/privacy-policy.en.md) · [Укра�
 Requirements: a stable Rust toolchain (MSRV 1.80; CI uses current stable), a C compiler, `perl` and `make` (SQLCipher and OpenSSL are compiled from source), Node.js ≥ 22 for UI checks, and Chromium or Chrome for end-to-end tests.
 
 ```bash
-git clone https://github.com/sashapiscivca-svg/kmit.git
+git clone https://github.com/sashapiscivca-svg/kmit-public.git
 cd kmit
 
 # Run the app in a desktop browser (the same Rust core as on Android)

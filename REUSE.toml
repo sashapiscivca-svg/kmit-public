@@ -4,7 +4,7 @@
 version = 1
 SPDX-PackageName = "Kmit"
 SPDX-PackageSupplier = "Oleksandr Shynkarenko <sasha.piscivca@gmail.com>"
-SPDX-PackageDownloadLocation = "https://github.com/sashapiscivca-svg/kmit"
+SPDX-PackageDownloadLocation = "https://github.com/sashapiscivca-svg/kmit-public"
 
 # Default: everything is software under PolyForm Noncommercial 1.0.0.
 [[annotations]]

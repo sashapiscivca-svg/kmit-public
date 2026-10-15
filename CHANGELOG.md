@@ -31,5 +31,5 @@ This is the first public release of the source code. It is **pre-alpha**: the An
 - No mathematics for grades 6–7; no typed-answer items for grades 6–7; no content for grades 8–12.
 - The embedded content-signing public key is a development key; the Android Keystore integration is behind a disabled feature flag.
 
-[Unreleased]: https://github.com/sashapiscivca-svg/kmit/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/sashapiscivca-svg/kmit/releases/tag/v0.1.0
+[Unreleased]: https://github.com/sashapiscivca-svg/kmit-public/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/sashapiscivca-svg/kmit-public/releases/tag/v0.1.0
