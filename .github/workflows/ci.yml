@@ -71,4 +71,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Ліцензії файлів (REUSE)
-        uses: fsfe/reuse-action@v5
+        uses: fsfe/reuse-action@v6
