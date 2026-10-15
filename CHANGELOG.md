@@ -4,9 +4,9 @@ All notable changes to this project are documented in this file. The format is b
 
 ## [Unreleased]
 
-## [0.1.0] — unreleased, first public source release
+## [0.1.0] — 2026-10-15, first public source release
 
-This is the first public release of the source code. It is **pre-alpha**: the Android app has never been run on a real phone, and all learning content is AI-drafted and not yet reviewed by human methodologists.
+This is the first public release of the source code. It is **pre-alpha**: the Android app has been tested manually by the author on a phone but not yet systematically across devices, and all learning content is AI-drafted and not yet reviewed by human methodologists.
 
 ### Added
 
@@ -26,7 +26,7 @@ This is the first public release of the source code. It is **pre-alpha**: the An
 
 ### Known limitations
 
-- Not run on a real Android device or emulator; WebView compatibility, SQLCipher at runtime, Argon2 timing, TalkBack and text-to-speech are unverified.
+- Tested manually by the author on one Android phone only; WebView compatibility on older devices, Argon2 timing on slow hardware, TalkBack and text-to-speech have not been tested systematically.
 - Content is AI-drafted and checked only automatically (lint and a blind answer-key pass); human methodologist review has not started.
 - No mathematics for grades 6–7; no typed-answer items for grades 6–7; no content for grades 8–12.
 - The embedded content-signing public key is a development key; the Android Keystore integration is behind a disabled feature flag.

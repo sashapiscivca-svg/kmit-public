@@ -10,7 +10,7 @@ The user interface and all learning content are in Ukrainian.
 
 > [!WARNING]
 > **Status: pre-alpha. Not ready for use with children.**
-> - The Android app has been built and checked only by automated tests and in a desktop browser. **It has never been run on a real phone** (or an emulator).
+> - The Android app is covered by automated tests and has been tested manually by the author on an Android phone. **It has not yet been tested systematically across devices** (older phones and WebViews, TalkBack, text-to-speech).
 > - **All learning content was drafted with AI agents** and checked by an automated "blind" answer-key pass. **It has not yet been reviewed by human methodologists and may contain factual or methodological errors.** Every content pack is marked `draft`; this label is currently shown only in the teacher's lesson library, not to children.
 > - Content exists for **grades 5–7 only**. Mathematics exists for grade 5 only. Grades 8–12 are not started (the app shows them as "coming").
 

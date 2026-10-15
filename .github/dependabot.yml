@@ -4,6 +4,19 @@ updates:
     directory: /
     schedule: { interval: weekly }
     open-pull-requests-limit: 5
+    ignore:
+      # Детермінований генератор задач: збережені роботи вчителя відтворюються із «зерна».
+      # Нова версія може дати іншу послідовність для того самого зерна, тож оновлювати лише
+      # свідомо, разом із тестом сталої послідовності. Для 0.x Dependabot вважає 0.3→0.9 «minor».
+      - dependency-name: rand_chacha
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: rand_core
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      # Криптографія сховища: змінене API, переходити лише окремою перевіреною зміною.
+      - dependency-name: getrandom
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
+      - dependency-name: blake2
+        update-types: ["version-update:semver-major", "version-update:semver-minor"]
   - package-ecosystem: github-actions
     directory: /
     schedule: { interval: monthly }

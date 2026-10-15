@@ -6,7 +6,7 @@
 
 This document covers building and testing Kmit from source: the desktop development build, the Android APKs, signing, and checking that the APK has no network permission. For what the pieces are, see [ARCHITECTURE.md](ARCHITECTURE.md).
 
-> **Status.** The Android build has been produced on a Linux x86_64 host and verified with automated checks only. **No APK has been run on a real device or emulator yet**, so on-device behaviour (WebView compatibility on old phones, SQLCipher at runtime, Argon2 speed, TalkBack, file saving, text-to-speech) is unverified.
+> **Status.** The Android build is produced on a Linux x86_64 host and covered by automated checks, and the author has tested the APK manually on an Android phone. Behaviour across devices (WebView compatibility on old phones, Argon2 speed on slow hardware, TalkBack, text-to-speech) has not yet been tested systematically.
 
 ## 1. Desktop build (no Android tools needed)
 
