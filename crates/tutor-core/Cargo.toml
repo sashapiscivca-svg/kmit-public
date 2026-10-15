@@ -16,7 +16,7 @@ workspace = true
 test-support = []
 
 [dependencies]
-rand_chacha = "0.3.1"
+rand_chacha = "0.9.0"
 rand_core = "0.6.4"
 
 [dev-dependencies]
