@@ -19,7 +19,7 @@ test-params = []
 blake2 = "0.10"
 tutor-core = { path = "../tutor-core" }
 rusqlite = { version = "0.40", features = ["bundled-sqlcipher-vendored-openssl"] }
-argon2 = "0.5"
+argon2 = "0.6"
 chacha20poly1305 = "0.10"
 getrandom = "0.2"
 zeroize = "1"
