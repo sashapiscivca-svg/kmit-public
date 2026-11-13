@@ -1,0 +1,300 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kmit для шкіл</title>
+<style>
+@font-face { font-family: Manrope; font-weight: 400; src: url({{font:Manrope-400}}) format('truetype'); }
+@font-face { font-family: Manrope; font-weight: 600; src: url({{font:Manrope-600}}) format('truetype'); }
+@font-face { font-family: Manrope; font-weight: 800; src: url({{font:Manrope-800}}) format('truetype'); }
+@font-face { font-family: Caveat; font-weight: 700; src: url({{font:Caveat-700}}) format('truetype'); }
+:root { --paper: #f3f7fb; --grid: #d3e0ee; --sheet: #fff; --sheet2: #eaf1f9; --ink: #1b2a6b; --soft: #4a5a96; --pen: #2b4bd6; --red: #d93a2f; --marker: #ffd23f; --ok: #13875f; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: #0a0f24; font-family: Manrope, system-ui, sans-serif; color: var(--ink); }
+#deck { position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden; }
+.slide { position: absolute; width: 1920px; height: 1080px; padding: 70px 110px 80px; background-color: var(--paper); background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px); background-size: 56px 56px; transform-origin: center center; display: none; overflow: hidden; }
+.slide.on { display: block; }
+h1, h2 { margin: 0; line-height: 1.02; font-family: Caveat, cursive; font-weight: 700; }
+h1 { font-size: 250px; letter-spacing: .01em; }
+h2 { font-size: 120px; }
+h3 { margin: 0; font-size: 48px; font-weight: 800; }
+.k { font-weight: 800; letter-spacing: .14em; text-transform: uppercase; font-size: 26px; color: var(--soft); margin: 0 0 20px; }
+p, li { font-size: 36px; line-height: 1.42; margin: 0; }
+.lead { font-size: 48px; color: var(--soft); line-height: 1.35; }
+.sheet { background: var(--sheet); border: 4px solid var(--ink); border-radius: 30px; padding: 36px 40px; box-shadow: 0 8px 0 var(--ink); }
+.phone { width: 330px; height: 716px; border: 12px solid var(--ink); border-radius: 64px; background: #f3f7fb; overflow: hidden; position: relative; padding-top: 38px; box-shadow: 0 16px 0 rgba(27,42,107,.18); flex: none; }
+.phone img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: top; }
+.phone::before { content: ""; position: absolute; top: 12px; left: 50%; width: 110px; height: 26px; margin-left: -55px; border-radius: 16px; background: var(--ink); z-index: 2; }
+.row { display: flex; gap: 40px; align-items: flex-start; }
+.col { display: flex; flex-direction: column; gap: 22px; }
+.grow { flex: 1; }
+.ticks { list-style: none; margin: 26px 0 0; padding: 0; display: grid; gap: 22px; }
+.ticks li { display: grid; grid-template-columns: 56px 1fr; gap: 20px; align-items: start; }
+.ticks li::before { content: "✓"; width: 52px; height: 52px; border-radius: 50%; background: var(--ok); color: #fff; font-weight: 800; display: grid; place-items: center; font-size: 32px; margin-top: 2px; }
+.worlds { display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; }
+.world { border: 4px solid var(--ink); border-radius: 26px; padding: 22px; background: var(--sheet); box-shadow: 0 8px 0 var(--ink); }
+.world .wh { display: flex; flex-direction: column; margin-bottom: 14px; } .world .wh b { font-size: 36px; } .world .wh span { font-size: 24px; font-weight: 800; color: var(--soft); text-transform: uppercase; letter-spacing: .08em; }
+.world .wr { display: grid; grid-template-columns: repeat(6, 1fr); gap: 8px; } .world svg { width: 100%; height: auto; display: block; }
+.w-forest { background-image: linear-gradient(rgba(58,166,106,.18), rgba(58,166,106,.18)); } .w-sea { background-image: linear-gradient(rgba(42,156,200,.2), rgba(42,156,200,.2)); }
+.w-sky { background-image: linear-gradient(rgba(154,134,232,.22), rgba(154,134,232,.22)); } .w-cave { background-image: linear-gradient(rgba(125,107,176,.22), rgba(125,107,176,.22)); }
+.w-desert { background-image: linear-gradient(rgba(224,160,64,.22), rgba(224,160,64,.22)); } .w-space { background-image: linear-gradient(rgba(74,94,200,.2), rgba(74,94,200,.2)); }
+.w-ice { background-image: linear-gradient(rgba(110,198,232,.24), rgba(110,198,232,.24)); } .w-summit { background-image: linear-gradient(rgba(224,98,58,.2), rgba(224,98,58,.2)); }
+.flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; margin-top: 44px; counter-reset: s; }
+.flow .sheet { counter-increment: s; position: relative; padding: 86px 24px 22px; min-height: 300px; }
+.flow .sheet h3 { font-size: 40px; }
+.flow .sheet::before { content: counter(s); position: absolute; top: 14px; left: 30px; font: 700 80px/1 Caveat, cursive; color: var(--red); }
+.flow .sheet p { font-size: 29px; line-height: 1.35; margin-top: 8px; }
+.big { font: 700 150px/1 Caveat, cursive; color: var(--red); white-space: nowrap; }
+.stats .big { font-size: 118px; }
+.stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 34px; }
+.stats .sheet { text-align: center; } .stats .sheet span { font-size: 30px; color: var(--soft); display: block; line-height: 1.3; }
+.foot { position: absolute; left: 110px; right: 110px; bottom: 40px; display: flex; justify-content: space-between; font-size: 24px; color: var(--soft); font-weight: 600; }
+.logo { font: 700 64px/1 Caveat, cursive; }
+.note { border-left: 10px solid var(--marker); background: var(--sheet); padding: 22px 30px; border-radius: 0 18px 18px 0; font-size: 36px; }
+.quad { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; counter-reset: q; }
+.quad .sheet { counter-increment: q; position: relative; padding-top: 110px; min-height: 520px; }
+.quad .sheet::before { content: counter(q); position: absolute; top: 18px; left: 36px; font: 700 96px/1 Caveat, cursive; color: var(--red); }
+.quad p, .trio p, .twocol p { font-size: 31px; line-height: 1.4; margin-top: 14px; }
+.trio { display: grid; grid-template-columns: repeat(3, 1fr); gap: 34px; margin-top: 44px; }
+.twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 36px; }
+.twocol .sheet { padding: 28px 32px; } .twocol h3 { font-size: 40px; }
+.dots { margin: 18px 0 0; padding-left: 40px; display: grid; gap: 12px; } .dots li { font-size: 32px; }
+#hint { position: fixed; bottom: 12px; right: 18px; color: #8fa0e8; font: 600 14px Manrope; z-index: 9; }
+@media print {
+  @page { size: 1920px 1080px; margin: 0; }
+  html, body { background: #fff; }
+  #deck { position: static; display: block; overflow: visible; }
+  .slide { display: block !important; position: relative; transform: none !important; page-break-after: always; break-after: page; }
+  #hint { display: none; }
+}
+</style>
+</head>
+<body>
+<div id="deck">
+
+<section class="slide on" aria-label="Титул">
+  <div class="row" style="justify-content:space-between;align-items:center;height:100%">
+    <div style="max-width:1060px">
+      <p class="k">Для директорів, методистів і вчителів · 5–7 класи</p>
+      <h1>Kmit</h1>
+      <p class="lead" style="margin-top:20px;font-size:62px;color:var(--ink);font-weight:800;line-height:1.12">Помічник для навчання за програмою НУШ, який працює без інтернету.</p>
+      <p class="lead" style="margin-top:28px">Учень вчиться й повторює, учитель готує роботи й уроки, методист перевіряє матеріали. Безкоштовно, без реклами й без збору даних.</p>
+    </div>
+    <div class="row" style="gap:28px;margin-top:60px">
+      <div class="phone"><img src="{{img:home}}" alt="Головний екран учня" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:80px"><img src="{{img:cabinet}}" alt="Кабінет вчителя" width="560" height="1212"></div>
+    </div>
+  </div>
+  <div class="foot"><span>Застосунок для Android · версія 0.1 (пілот)</span><span>Знімки екранів із тестовими даними</span></div>
+</section>
+
+<section class="slide" aria-label="Коротко">
+  <p class="k">Коротко</p>
+  <h2>Чотири речі, які варто знати.</h2>
+  <div class="quad">
+    <div class="sheet"><h3>Працює офлайн</h3><p>Застосунок не має дозволу на інтернет. Навчання не залежить від зв'язку, світла в роутері чи мобільного трафіку.</p></div>
+    <div class="sheet"><h3>Безкоштовний</h3><p>Без реклами, покупок, підписок і облікових записів. Школа нічого не підключає й не оплачує.</p></div>
+    <div class="sheet"><h3>Приватний</h3><p>Дані дитини лишаються на телефоні, зашифровані й захищені PIN-кодом. Ми їх не отримуємо.</p></div>
+    <div class="sheet"><h3>Три ролі</h3><p>Учень і вчитель в одному застосунку, окремі профілі. Для методистів окремий застосунок «Kmit Методист».</p></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Для учня">
+  <div class="row" style="gap:80px;height:100%;align-items:center">
+    <div class="grow">
+      <p class="k">Для учня</p>
+      <h2>Пояснює. Підказує. Нагадує.</h2>
+      <ul class="ticks">
+        <li><span><b>Урок до кожної теми:</b> коротке пояснення, приклади, які розкриваються крок за кроком, контрольні питання й власний конспект.</span></li>
+        <li><span><b>Завдання з навідними підказками.</b> Спершу три підказки, потім схожий розв'язаний приклад з іншими числами, потім «запитай дорослого».</span></li>
+        <li><span><b>Повторення за інтервалами:</b> теми повертаються вчасно, щоб не забувалися.</span></li>
+      </ul>
+    </div>
+    <div class="row" style="gap:28px">
+      <div class="phone"><img src="{{img:lesson-example}}" alt="Розібраний приклад по кроках" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:70px"><img src="{{img:hint}}" alt="Підказка без відповіді" width="560" height="1212"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Педагогіка">
+  <p class="k">Як це влаштовано</p>
+  <h2>Дитина думає сама.</h2>
+  <div class="trio">
+    <div class="sheet"><h3>Відповідь не видається</h3><p>У математичних завданнях застосунок не показує дитині ні відповіді, ні проміжних результатів. Це закладено в коді, а не залишено на розсуд. Для фактів правильна відповідь з поясненням з'являється після власної спроби.</p></div>
+    <div class="sheet"><h3>Посильний наступний крок</h3><p>Застосунок стежить, що дитина вже опанувала, і пропонує те, що їй до снаги, перемішуючи теми й плануючи повторення. Алгоритм прозорий, без «чорної скриньки».</p></div>
+    <div class="sheet"><h3>Помилка не соромить</h3><p>Без червоних екранів і штрафів. Підказки пояснюють типову помилку, а складне завдання повертається через кілька днів.</p></div>
+  </div>
+  <p class="lead" style="margin-top:34px;font-size:38px">Математику 5 класу (35 тем) створює генератор: відповідь обчислює програма й перевіряє незалежно, а не людина вручну.</p>
+</section>
+
+<section class="slide" aria-label="Мотивація">
+  <div class="row" style="gap:70px;height:100%;align-items:center">
+    <div class="row" style="gap:28px">
+      <div class="phone"><img src="{{img:album}}" alt="Колекція істот" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:70px"><img src="{{img:ruler}}" alt="Лінійка тижня" width="560" height="1212"></div>
+    </div>
+    <div class="grow">
+      <p class="k">Мотивація без тиску</p>
+      <h2>Нагорода за зусилля, а не за швидкість.</h2>
+      <ul class="ticks">
+        <li><span><b>Колекція істот</b> для кожного класу: нову отримують за опановану тему й наполегливість.</span></li>
+        <li><span><b>Лінійка тижня</b> показує старанність, а не оцінку. Нагороди лише додаються й ніколи не забираються.</span></li>
+        <li><span><b>Без таймерів і серій</b>, без змагання з іншими. Кнопка «Закінчити на сьогодні» завжди під рукою.</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Для вчителя">
+  <div class="row" style="gap:70px;height:100%;align-items:center">
+    <div class="grow">
+      <p class="k">Для вчителя</p>
+      <h2>Менше рутини перед уроком.</h2>
+      <ul class="ticks">
+        <li><span><b>Роботи для друку:</b> самостійна, контрольна, домашня, тренування НМТ, з пропусками, словниковий диктант. До 4 варіантів, ключ, бланк відповідей, картки для розрізання (PDF).</span></li>
+        <li><span><b>Нотатки до уроку:</b> план на 45 хвилин, пам'ятка для учнів, тема з відповідями й ключовими ідеями.</span></li>
+        <li><span><b>Бібліотека уроків</b> з пошуком і закладками, <b>тематичний план</b> курсу для друку.</span></li>
+        <li><span>У кабінеті вчителя <b>немає даних учнів</b>.</span></li>
+      </ul>
+    </div>
+    <div class="row" style="gap:28px">
+      <div class="phone"><img src="{{img:cabinet}}" alt="Кабінет вчителя" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:70px"><img src="{{img:work-ready}}" alt="Готова робота: завдання, ключ, бланк" width="560" height="1212"></div>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Для методиста">
+  <div class="row" style="gap:70px;height:100%;align-items:center">
+    <div class="row" style="gap:28px">
+      <div class="phone"><img src="{{img:reviewer-task}}" alt="Вичитка завдання в Kmit Методист" width="560" height="1212"></div>
+      <div class="phone" style="margin-top:70px"><img src="{{img:reviewer-summary}}" alt="Підсумок теми" width="560" height="1212"></div>
+    </div>
+    <div class="grow">
+      <p class="k">Для методиста</p>
+      <h2>Фахова перевірка без програмування.</h2>
+      <ul class="ticks">
+        <li><span><b>«Kmit Методист»:</b> кожен текст можна позначити «усе гаразд», виправити або прибрати. Результат зберігається в одному файлі.</span></li>
+        <li><span><b>Або документ Word</b> на предмет і клас, для тих, хто не користується застосунком: виправлення пишуть просто в таблиці.</span></li>
+        <li><span>Виправлення потрапляють у застосунок <b>автоматично</b>, без ручного переписування, а тема отримує статус «вичитано» чи «схвалено».</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Наповнення">
+  <p class="k">Що вже є</p>
+  <h2>5–7 класи, 23 курси.</h2>
+  <div class="stats" style="margin-top:26px">
+    <div class="sheet"><div class="big">446</div><span>тем з уроками</span></div>
+    <div class="sheet"><div class="big">11 330</div><span>готових завдань і генератор математики 5 класу</span></div>
+    <div class="sheet"><div class="big">23</div><span>курси «предмет × клас»</span></div>
+    <div class="sheet"><div class="big">6</div><span>видів робіт для друку</span></div>
+  </div>
+  <div class="row" style="margin-top:34px">
+    <div class="sheet grow"><h3>5 клас · 134 теми</h3><p style="font-size:30px;margin-top:6px;line-height:1.35">Математика, українська мова й література, англійська, вступ до історії, природознавство, інформатика</p></div>
+    <div class="sheet grow"><h3>6 клас · 136 тем</h3><p style="font-size:30px;margin-top:6px;line-height:1.35">Українська мова й література, англійська, історія, біологія, географія, інформатика</p></div>
+    <div class="sheet grow"><h3>7 клас · 176 тем</h3><p style="font-size:30px;margin-top:6px;line-height:1.35">Українська мова й література, англійська, історія, біологія, географія, фізика, хімія, інформатика</p></div>
+  </div>
+  <p class="lead" style="margin-top:18px;font-size:34px">Тематику звіряємо з модельними програмами МОН. Далі: математика 6–7 класів, 8–12 класи.</p>
+</section>
+
+<section class="slide" aria-label="Приватність">
+  <div class="row" style="gap:80px;height:100%;align-items:center">
+    <div class="grow">
+      <p class="k">Приватність і безпека</p>
+      <h2>Дані дитини не залишають телефона.</h2>
+      <div class="twocol">
+        <div class="sheet"><h3>Немає мережі</h3><p>Дозвіл на інтернет вилучено з застосунку. Автоматичні тести не пропустять його повернення, як і рекламних чи аналітичних бібліотек.</p></div>
+        <div class="sheet"><h3>Шифрування</h3><p>Кожен профіль зашифровано, доступ за PIN-кодом, є код відновлення. Видалення профілю знищує ключі.</p></div>
+        <div class="sheet"><h3>Мінімум даних</h3><p>Лише псевдонім і картинка: без прізвища, школи, фото чи дати народження. До 4 профілів на пристрої.</p></div>
+        <div class="sheet"><h3>Учитель бачить лише папір</h3><p>Дитина може показати аркуш про свою роботу. Цифрового каналу від дитини до вчителя немає.</p></div>
+      </div>
+    </div>
+    <div class="phone"><img src="{{img:profiles}}" alt="Екран профілів: усе лишається на пристрої" width="560" height="1212"></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Доступність">
+  <div class="row" style="gap:70px;height:100%;align-items:center">
+    <div class="grow">
+      <p class="k">Для кожної дитини</p>
+      <h2>Зручно читати, легко запустити.</h2>
+      <ul class="ticks">
+        <li><span><b>Розмір тексту</b>, більші проміжки між рядками, менше руху на екрані, світла й темна теми.</span></li>
+        <li><span><b>Озвучення</b> завдань і підказок засобами телефона (ще перевіряється на пристроях).</span></li>
+        <li><span><b>Android 7.0 і новіші:</b> розраховано й на недорогі телефони. Без встановлення сервера й без налаштувань у школі.</span></li>
+        <li><span><b>Нові матеріали</b> встановлюються файлом із цифровим підписом, без інтернету й без перевстановлення застосунку.</span></li>
+      </ul>
+    </div>
+    <div class="phone"><img src="{{img:settings}}" alt="Налаштування читання" width="560" height="1212"></div>
+  </div>
+</section>
+
+<section class="slide" aria-label="Якість">
+  <p class="k">Якість і чесність</p>
+  <h2>Як ми перевіряємо матеріали.</h2>
+  <div class="flow">
+    <div class="sheet"><h3>План</h3><p>Тема за модельною програмою МОН і підручниками з грифом</p></div>
+    <div class="sheet"><h3>Чернетка</h3><p>Урок і 25–30 завдань на тему, підготовлені за допомогою ШІ</p></div>
+    <div class="sheet"><h3>Сліпа перевірка</h3><p>Незалежний перевіряльник розв'язує, не бачачи ключа; розбіжності розбираємо</p></div>
+    <div class="sheet"><h3>Вичитка методистом</h3><p>Фахівець-предметник у застосунку або в документі Word</p></div>
+    <div class="sheet"><h3>Затверджено</h3><p>Лише тоді знімається статус «чернетка»</p></div>
+  </div>
+  <p class="note" style="margin-top:44px"><b>Сьогодні весь вміст має статус «чернетка»:</b> методисти його ще не вичитували, тож у ньому можуть бути помилки. Тому нам потрібні методисти-предметники. Kmit не замінює вчителя й не обіцяє результатів НМТ.</p>
+</section>
+
+<section class="slide" aria-label="Стан">
+  <p class="k">Де ми зараз</p>
+  <h2>Ранній етап. Говоримо прямо.</h2>
+  <div class="twocol" style="margin-top:44px;grid-template-columns:1fr 1fr">
+    <div class="sheet"><h3 style="color:var(--ok)">Готово</h3>
+      <ul class="dots"><li>Застосунок для учня й учителя, застосунок методиста</li><li>Уроки й завдання для 5–7 класів (чернетка)</li><li>Автоматичні тести, зокрема на відсутність мережі</li><li>Відкритий код для некомерційного використання</li></ul></div>
+    <div class="sheet"><h3 style="color:var(--red)">Ще попереду</h3>
+      <ul class="dots"><li>Вичитка матеріалів методистами</li><li>Систематична перевірка на різних телефонах, озвучення, TalkBack</li><li>Математика 6–7 класів, 8–12 класи</li><li>Пілот у класі з учителем</li></ul></div>
+  </div>
+  <p class="lead" style="margin-top:34px;font-size:40px">Застосунку ще немає в Google Play: його встановлюють файлом APK. Для широкого використання з дітьми він поки не готовий.</p>
+</section>
+
+<section class="slide" aria-label="Як долучитися">
+  <p class="k">Як долучитися</p>
+  <h2>Що може зробити школа.</h2>
+  <div class="trio">
+    <div class="sheet"><h3>Методисти</h3><p>Вичитати свій предмет і клас: у «Kmit Методист» або в документі Word. Ваше слово остаточне щодо фактів і методики.</p></div>
+    <div class="sheet"><h3>Учителі</h3><p>Спробувати кабінет: згенерувати роботу, переглянути нотатки до уроку, розповісти, чого бракує.</p></div>
+    <div class="sheet"><h3>Директори</h3><p>Підтримати невеликий пілот у 5 класі: короткі заняття, письмова згода батьків, жодних даних дітей у нас.</p></div>
+  </div>
+  <p class="lead" style="margin-top:44px">Код: PolyForm Noncommercial 1.0.0. Матеріали: CC BY-NC-SA 4.0. Школи й родини користуються вільно й безкоштовно.</p>
+</section>
+
+<section class="slide" aria-label="Контакти">
+  <div class="row" style="height:100%;align-items:center;justify-content:space-between">
+    <div style="max-width:1050px">
+      <p class="k">Дякуємо</p>
+      <h2>Зробімо навчання спокійнішим разом.</h2>
+      <ul class="ticks">
+        <li><span><b>Олександр Шинкаренко</b>, автор проєкту</span></li>
+        <li><span>sasha.piscivca@gmail.com</span></li>
+        <li><span style="white-space:nowrap;font-size:32px">github.com/sashapiscivca-svg/kmit-public</span></li>
+      </ul>
+    </div>
+    <div style="text-align:center"><div class="logo" style="font-size:300px">Kmit</div><p class="lead" style="margin-top:10px">Помічник для навчання.<br>Усе лишається на пристрої.</p></div>
+  </div>
+</section>
+</div>
+<div id="hint">← → або пробіл · Ctrl+P для PDF</div>
+<script>
+(function () {
+  var slides = [].slice.call(document.querySelectorAll('.slide')), i = 0;
+  function fit() { var s = Math.min(innerWidth / 1920, innerHeight / 1080); slides.forEach(function (el) { el.style.transform = 'scale(' + s + ')'; }); }
+  function go(n) { i = Math.max(0, Math.min(slides.length - 1, n)); slides.forEach(function (el, k) { el.classList.toggle('on', k === i); }); location.hash = String(i + 1); }
+  addEventListener('resize', fit); fit();
+  addEventListener('keydown', function (e) { if (['ArrowRight', 'PageDown', ' ', 'Enter'].indexOf(e.key) >= 0) { e.preventDefault(); go(i + 1); } if (['ArrowLeft', 'PageUp', 'Backspace'].indexOf(e.key) >= 0) { e.preventDefault(); go(i - 1); } if (e.key === 'Home') go(0); if (e.key === 'End') go(slides.length - 1); });
+  addEventListener('click', function (e) { go(e.clientX > innerWidth / 2 ? i + 1 : i - 1); });
+  var h = parseInt(location.hash.slice(1), 10); if (h) go(h - 1);
+})();
+</script>
+</body>
+</html>

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Збирає одноплікові сторінки site/index.html і site/presentation.html: підставляє шрифти, знімки й істот у data:-посилання.
+"""Збирає одноплікові сторінки site/index.html, site/presentation.html і site/schools.html: підставляє шрифти, знімки й істот у data:-посилання.
 
   python3 site/tools/build_site.py
 Шаблони: site/src/*.template.html. Знімки: site/assets/web/*.webp (site/tools/capture.sh + оптимізація, див. site/README.md).
@@ -33,3 +33,5 @@ def render(src, dst):
 render('landing.template.html', 'index.html')
 if (ROOT / 'src' / 'presentation.template.html').exists():
     render('presentation.template.html', 'presentation.html')
+if (ROOT / 'src' / 'schools.template.html').exists():
+    render('schools.template.html', 'schools.html')
